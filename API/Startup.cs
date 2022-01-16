@@ -1,5 +1,7 @@
 using Application;
 using Application.Persistence;
+using Infrastructure;
+using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,7 @@ namespace API
                     }));
 
             services.AddApplication(Configuration);
+            services.AddInfrastructure(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
