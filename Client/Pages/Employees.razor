@@ -1,0 +1,19 @@
+﻿@page "/employees"
+@using Client.Components
+@using System.Net
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using Application.Queries.Employee
+@inject HttpClient Http
+
+<div class="row">
+    <div class="col-md-2">
+        <a href="/createProduct">Create Employee</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <EmployeeTable Employees="EmployeeList"/>
+    </div>
+</div>
