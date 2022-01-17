@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.HttpRepository.Employees;
+using Microsoft.JSInterop;
 
 namespace Client.Pages
 {
     public partial class Employees : ComponentBase
     {
-        public List<GetEmployeesQuery> EmployeeList { get; set; } = new();
+        private List<GetEmployeesQuery> EmployeeList { get; set; } = new();
 
         [Inject]
         public IEmployeesHttpRepository EmployeesRepository { get; set; }

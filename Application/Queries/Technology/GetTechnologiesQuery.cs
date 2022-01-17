@@ -1,6 +1,8 @@
-﻿namespace Application.Queries.Technology
+﻿using Application.Common.Utils;
+
+namespace Application.Queries.Technology
 {
-    public class GetTechnologiesQuery
+    public class GetTechnologiesQuery : IDropDownEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

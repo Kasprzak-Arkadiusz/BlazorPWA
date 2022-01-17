@@ -1,25 +1,30 @@
-﻿@using Application.Queries.Employee
+﻿
+@using Application.Queries.Employee
 @if (Employees.Count > 0)
 {
-    <SfGrid DataSource="@Employees" AllowFiltering="true" AllowPaging="true">
+    <SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true">
         <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
         <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
         <GridColumns>
-            <GridColumn Field="@nameof(GetEmployeesQuery.FirstName)" HeaderText="First name"></GridColumn>
-            <GridColumn Field="@nameof(GetEmployeesQuery.LastName)" HeaderText="Last name"></GridColumn>
-            <GridColumn Field="@nameof(GetEmployeesQuery.Age)" HeaderText="Age"></GridColumn>
-            <GridColumn HeaderText="Technologies">
-                <Template>
-                    @{
-                        var currentEmployee = context as GetEmployeesQuery;
-                        foreach (var technology in currentEmployee.TechnologyNames)
-                        {
-                            <p>@technology</p>
-                        }
-                    }
-                </Template>
+            <GridColumn Field="@nameof(EmployeeTableVM.FirstName)" HeaderText="First name"></GridColumn>
+            <GridColumn Field="@nameof(EmployeeTableVM.LastName)" HeaderText="Last name"></GridColumn>
+            <GridColumn Field="@nameof(EmployeeTableVM.Age)" HeaderText="Age"></GridColumn>
+            <GridColumn Field="@nameof(EmployeeTableVM.TechnologyNamesFlattened)" HeaderText="Technologies" FilterSettings="@(new FilterSettings{Operator = Operator.Contains})">
+                <FilterTemplate>
+                    <SfDropDownList Placeholder="All" DataSource="@TechnologiesDropDownSource" ID="test" TItem="DropDownListItem" TValue="string">
+                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                        <DropDownListEvents TItem="DropDownListItem" TValue="string" ValueChange="@SelectedTechnologyChange"></DropDownListEvents>
+                    </SfDropDownList>
+                </FilterTemplate>
             </GridColumn>
-            <GridColumn Field="@nameof(GetEmployeesQuery.TeamId)" HeaderText="Team id"></GridColumn>
+            <GridColumn Field="@nameof(GetEmployeesQuery.TeamId)" HeaderText="Team id">
+                <FilterTemplate>
+                    <SfDropDownList Placeholder="All" DataSource="@TeamsDropDownSource" ID="test" TItem="DropDownListItem" TValue="string">
+                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                        <DropDownListEvents TItem="DropDownListItem" TValue="string" ValueChange="@SelectedTeamChange"></DropDownListEvents>
+                    </SfDropDownList>
+                </FilterTemplate>
+            </GridColumn>
         </GridColumns>
     </SfGrid>
 }
