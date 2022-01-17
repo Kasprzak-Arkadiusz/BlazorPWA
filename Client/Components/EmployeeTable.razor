@@ -1,45 +1,30 @@
-﻿@if (Employees.Count <= 0)
+﻿@using Application.Queries.Employee
+@if (Employees.Count > 0)
 {
-    <span>
-        Loading products...
-    </span>
-
+    <SfGrid DataSource="@Employees" AllowFiltering="true" AllowPaging="true">
+        <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+        <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+        <GridColumns>
+            <GridColumn Field="@nameof(GetEmployeesQuery.FirstName)" HeaderText="First name"></GridColumn>
+            <GridColumn Field="@nameof(GetEmployeesQuery.LastName)" HeaderText="Last name"></GridColumn>
+            <GridColumn Field="@nameof(GetEmployeesQuery.Age)" HeaderText="Age"></GridColumn>
+            <GridColumn HeaderText="Technologies">
+                <Template>
+                    @{
+                        var currentEmployee = context as GetEmployeesQuery;
+                        foreach (var technology in currentEmployee.TechnologyNames)
+                        {
+                            <p>@technology</p>
+                        }
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn Field="@nameof(GetEmployeesQuery.TeamId)" HeaderText="Team id"></GridColumn>
+        </GridColumns>
+    </SfGrid>
 }
 else {
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
-            <th scope="col">Age</th>
-            <th scope="col">Technologies</th>
-            <th scope="col">Team id</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var employee in Employees)
-        {
-            <tr>
-                <td class="align-middle">
-                    @employee.FirstName
-                </td>
-                <td class="align-middle">
-                    @employee.LastName
-                </td>
-                <td class="align-middle">
-                    @employee.Age
-                </td>
-                <td class="align-middle">
-                    @foreach (var technology in employee.TechnologyNames)
-                    {
-                        <p>@technology</p>
-                    }
-                </td>
-                <td class="align-middle">
-                    @employee.TeamId
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <span>
+        Loading employees...
+    </span>
 }

@@ -1,10 +1,10 @@
-﻿using Application.Queries.Employee;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Queries.Employee;
 
-namespace Client.HttpRepository
+namespace Client.HttpRepository.Employees
 {
-    public interface IHttpEmployeesRepository
+    public interface IEmployeesHttpRepository
     {
         Task<List<GetEmployeesQuery>> GetAllEmployeesAsync();
 

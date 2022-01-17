@@ -1,8 +1,8 @@
 using Application.Queries.Employee;
-using Client.HttpRepository;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Client.HttpRepository.Employees;
 
 namespace Client.Pages
 {
@@ -11,7 +11,7 @@ namespace Client.Pages
         public List<GetEmployeesQuery> EmployeeList { get; set; } = new();
 
         [Inject]
-        public IHttpEmployeesRepository EmployeesRepository { get; set; }
+        public IEmployeesHttpRepository EmployeesRepository { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

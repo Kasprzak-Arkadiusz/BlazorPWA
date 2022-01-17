@@ -1,0 +1,12 @@
+﻿@using Application.Queries.Technology
+@if (Technologies.Count > 0)
+{
+    <SfGrid DataSource="@Technologies" AllowFiltering="true" AllowPaging="true">
+        <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+        <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+        <GridColumns>
+            <GridColumn Field="@nameof(GetTechnologiesQuery.Name)" HeaderText="Name"></GridColumn>
+            <GridColumn Field="@nameof(GetTechnologiesQuery.CategoryName)" HeaderText="Category"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+}

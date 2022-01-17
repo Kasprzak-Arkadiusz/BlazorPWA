@@ -5,22 +5,17 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Client.HttpRepository
+namespace Client.HttpRepository.Employees
 {
-    public class HttpEmployeesRepository : IHttpEmployeesRepository
+    public class EmployeesHttpRepository : BaseHttpRepository, IEmployeesHttpRepository
     {
-        private readonly JsonSerializerOptions _options;
-        private readonly HttpClient _httpClient;
-
-        public HttpEmployeesRepository(IHttpClientFactory httpClientFactory)
+        public EmployeesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
-            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            _httpClient = httpClientFactory.CreateClient("WebAPI");
         }
 
         public async Task<List<GetEmployeesQuery>> GetAllEmployeesAsync()
         {
-            var response = await _httpClient.GetAsync("Employees");
+            var response = await HttpClient.GetAsync("Employees");
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -28,7 +23,7 @@ namespace Client.HttpRepository
                 throw new ApplicationException(content);
             }
 
-            var employees = JsonSerializer.Deserialize<List<GetEmployeesQuery>>(content, _options);
+            var employees = JsonSerializer.Deserialize<List<GetEmployeesQuery>>(content, Options);
 
             return employees;
         }

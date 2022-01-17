@@ -1,0 +1,13 @@
+﻿@using Application.Queries.Project
+@if (Projects.Count > 0)
+{
+    <SfGrid DataSource="@Projects" AllowFiltering="true" AllowPaging="true">
+        <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+        <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+        <GridColumns>
+            <GridColumn Field="@nameof(GetProjectsQuery.Name)" HeaderText="Project name"></GridColumn>
+            <GridColumn Field="@nameof(GetProjectsQuery.StartDate)" HeaderText="Start date"></GridColumn>
+            <GridColumn Field="@nameof(GetProjectsQuery.TeamId)" HeaderText="Team id"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+}

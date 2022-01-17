@@ -6,6 +6,7 @@ namespace Client.Components
 {
     public partial class EmployeeTable
     {
-        [Parameter] public List<GetEmployeesQuery> Employees { get; set; } = new ();
+        [Parameter] 
+        public List<GetEmployeesQuery> Employees { get; set; } = new();
     }
 }
