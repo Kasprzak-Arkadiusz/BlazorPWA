@@ -32,7 +32,7 @@ namespace API
             services.AddCors(policy =>
             {
                 policy.AddPolicy("CorsPolicy", opt => opt
-                    .WithOrigins("https://localhost:5001")
+                    .WithOrigins("https://localhost:5001","https://calm-field-0a37c9303.1.azurestaticapps.net")
                     .AllowAnyHeader()
                     .WithMethods());
             });
