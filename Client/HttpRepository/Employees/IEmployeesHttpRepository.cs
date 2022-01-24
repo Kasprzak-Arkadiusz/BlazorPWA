@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Commands.Employee;
 using Application.Queries.Employee;
 
 namespace Client.HttpRepository.Employees
@@ -8,6 +9,6 @@ namespace Client.HttpRepository.Employees
     {
         Task<List<GetEmployeesQuery>> GetAllEmployeesAsync();
 
-        Task<List<GetEmployeesQuery>> GetEmployeeByIdAsync();
+        Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate);
     }
 }

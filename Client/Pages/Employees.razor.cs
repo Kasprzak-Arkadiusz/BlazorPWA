@@ -1,9 +1,12 @@
 using Application.Queries.Employee;
+using Application.Queries.Team;
+using Application.Queries.Technology;
+using Client.HttpRepository.Employees;
+using Client.HttpRepository.Teams;
+using Client.HttpRepository.Technologies;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Client.HttpRepository.Employees;
-using Microsoft.JSInterop;
 
 namespace Client.Pages
 {
@@ -13,6 +16,7 @@ namespace Client.Pages
 
         [Inject]
         public IEmployeesHttpRepository EmployeesRepository { get; set; }
+
 
         protected override async Task OnInitializedAsync()
         {

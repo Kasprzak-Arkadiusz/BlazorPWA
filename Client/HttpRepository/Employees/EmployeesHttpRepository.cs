@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Application.Commands.Employee;
+using System.Text;
 
 namespace Client.HttpRepository.Employees
 {
@@ -28,9 +30,13 @@ namespace Client.HttpRepository.Employees
             return employees;
         }
 
-        public async Task<List<GetEmployeesQuery>> GetEmployeeByIdAsync()
+        public async Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate)
         {
-            throw new System.NotImplementedException();
+            var json =  JsonSerializer.Serialize(employeeToUpdate);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await HttpClient.PutAsync("Employees", content);
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

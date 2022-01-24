@@ -9,6 +9,7 @@ using Syncfusion.Blazor;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Client.Utilities;
 
 namespace Client
 {
@@ -31,6 +32,9 @@ namespace Client
             builder.Services.AddTransient<ITechnologyCategoryHttpRepository, TechnologyCategoryHttpRepository>();
             builder.Services.AddTransient<ITeamHttpRepository, TeamHttpRepository>();
             builder.Services.AddTransient<IProjectsHttpRepository, ProjectsHttpRepository>();
+
+            builder.Services.AddTransient<IDropDownFiller, DropDownFiller>();
+
             await builder.Build().RunAsync();
         }
     }
