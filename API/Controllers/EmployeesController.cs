@@ -43,14 +43,13 @@ namespace API.Controllers
         {
             try
             {
-                await _employeeService.AddAsync(createEmployee);
+                var id = await _employeeService.AddAsync(createEmployee);
+                return Ok(id);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpPut]
@@ -61,13 +60,12 @@ namespace API.Controllers
             try
             {
                 await _employeeService.UpdateAsync(updateEmployee);
+                return Ok();
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpDelete("{id}")]

@@ -11,7 +11,7 @@ namespace Application.Common.Interfaces.Repositories
 
         public Task<GetEmployeesQuery> GetByIdAsync(int id);
 
-        public Task AddAsync(CreateEmployee t);
+        public Task<int> AddAsync(CreateEmployee t);
 
         public Task UpdateAsync(UpdateEmployee t);
 

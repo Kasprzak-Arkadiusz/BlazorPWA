@@ -1,11 +1,12 @@
-﻿using Application.Queries.Employee;
+﻿using Application.Commands.Employee;
+using Application.Queries.Employee;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Application.Commands.Employee;
-using System.Text;
 
 namespace Client.HttpRepository.Employees
 {
@@ -30,11 +31,31 @@ namespace Client.HttpRepository.Employees
             return employees;
         }
 
+        public async Task<int> CreateEmployeeAsync(CreateEmployee employeeToAdd)
+        {
+            var json = JsonSerializer.Serialize(employeeToAdd);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync("Employees", content);
+
+            if (!response.IsSuccessStatusCode) 
+                return 0;
+
+            var id = await response.Content.ReadFromJsonAsync<int>();
+            return id;
+        }
+
         public async Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate)
         {
-            var json =  JsonSerializer.Serialize(employeeToUpdate);
+            var json = JsonSerializer.Serialize(employeeToUpdate);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await HttpClient.PutAsync("Employees", content);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteEmployeeAsync(int id)
+        {
+            var response = await HttpClient.DeleteAsync($"Employees/{id}");
 
             return response.IsSuccessStatusCode;
         }

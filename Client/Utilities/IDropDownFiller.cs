@@ -10,10 +10,5 @@ namespace Client.Utilities
             string filterValue, string filterText);
         public Task<List<DropDownListItem>> FillTeamsDropDownSource(List<DropDownListItem> teamsDropDownSource,
             string filterValue, string filterText);
-
-        public Task<List<DropDownListItem>> FillRemoveTechnologyDropdownSource(
-            List<DropDownListItem> technologiesToRemove);
-        public Task<List<DropDownListItem>> FillAddTechnologyDropdownSource(
-            List<DropDownListItem> technologiesToAdd);
     }
 }

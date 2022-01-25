@@ -53,7 +53,7 @@ namespace Infrastructure.Repositories
             return employee;
         }
 
-        public async Task AddAsync(CreateEmployee e)
+        public async Task<int> AddAsync(CreateEmployee e)
         {
             var employee = _mapper.Map<Employee>(e);
             var technologies = await _context.Technologies.Where(t => e.TechnologyNames.Contains(t.Name)).ToListAsync();
@@ -72,6 +72,8 @@ namespace Infrastructure.Repositories
 
             await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
+
+            return employee.Id;
         }
 
         public async Task UpdateAsync(UpdateEmployee updateEmployee)

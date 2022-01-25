@@ -9,6 +9,7 @@ using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.ViewModels;
 
 namespace Client.Components
 {
@@ -28,17 +29,18 @@ namespace Client.Components
         private List<DropDownListItem> EditTeamDropDownSource { get; set; }
         private List<DropDownListItem> EditTechnologiesToRemoveDropDownSource { get; set; }
         private List<DropDownListItem> EditTechnologiesToAddDropDownSource { get; set; }
+        private List<DropDownListItem> CreateTechnologiesToAddDropDownSource { get; set; }
         private List<EmployeeTableVM> EmployeeTableVms { get; set; }
         private SfGrid<EmployeeTableVM> EmployeesGrid { get; set; }
 
         private const string DefaultFilterText = "All";
         private const string DefaultFilterValue = "All";
 
+        private bool _isEdit;
+
         protected override async Task OnParametersSetAsync()
         {
             FlattenEmployeeTableVms();
-            TechnologiesDropDownSource = await DropDownFiller.FillTechnologiesDropDownSource(TechnologiesDropDownSource, DefaultFilterValue, DefaultFilterText);
-            TeamsDropDownSource = await DropDownFiller.FillTeamsDropDownSource(TeamsDropDownSource, DefaultFilterValue, DefaultFilterText);
             await base.OnParametersSetAsync();
         }
 
@@ -61,6 +63,11 @@ namespace Client.Components
             TeamsDropDownSource = await DropDownFiller.FillTeamsDropDownSource(TeamsDropDownSource, DefaultFilterValue, DefaultFilterText);
 
             await base.OnInitializedAsync();
+        }
+
+        private static string GetHeaderText(EmployeeTableVM employeeTableVm)
+        {
+            return employeeTableVm.Id == 0 ? "Add new employee" : "Edit employee details";
         }
 
         private async Task SelectedTechnologyChangeHandler(ChangeEventArgs<string, DropDownListItem> args)
@@ -89,21 +96,46 @@ namespace Client.Components
         {
             switch (args.RequestType)
             {
+                case Action.Add:
+                    _isEdit = false;
+                    InitCreateDropdowns();
+                    return;
+
                 case Action.Save when args.Action == "Add":
+                    await AddEmployee(args.Data);
                     return;
 
                 case Action.BeginEdit:
+                    _isEdit = true;
                     InitEditDropdowns(args.Data.TechnologyNamesFlattened);
                     return;
 
                 case Action.Save when args.Action == "Edit":
-                    await EditEmployee(args);
+                    await EditEmployee(args.Data);
+                    return;
+
+                case Action.Delete:
+                    await DeleteEmployee(args.Data.Id);
                     return;
 
                 default:
                     return;
             }
         }
+
+        private void InitCreateDropdowns()
+        {
+            CreateTechnologiesToAddDropDownSource = TechnologiesDropDownSource
+                    .Where(td => td.Value != DefaultFilterValue)
+                    .Select(td => new DropDownListItem
+                    {
+                        Value = td.Text,
+                        Text = td.Text
+                    }).ToList();
+
+            EditTeamDropDownSource = TeamsDropDownSource.Where(t => t.Value != DefaultFilterValue).ToList();
+        }
+
         private void InitEditDropdowns(string employeeTechnologies)
         {
             var technologies = employeeTechnologies.Split(", ").ToList();
@@ -125,9 +157,25 @@ namespace Client.Components
             EditTeamDropDownSource = TeamsDropDownSource.Where(t => t.Value != DefaultFilterValue).ToList();
         }
 
-        private async Task EditEmployee(ActionEventArgs<EmployeeTableVM> args)
+        private async Task AddEmployee(EmployeeTableVM employeeVm)
         {
-            var employeeVm = args.Data;
+            var employeeToAdd = new CreateEmployee
+            {
+                Age = employeeVm.Age,
+                FirstName = employeeVm.FirstName,
+                LastName = employeeVm.LastName,
+                TeamId = int.Parse(employeeVm.TeamId),
+                TechnologyNames = new List<string> { employeeVm.Technology }
+            };
+
+            var id = await EmployeesHttpRepository.CreateEmployeeAsync(employeeToAdd);
+            
+            employeeVm.TechnologyNamesFlattened = string.IsNullOrEmpty(employeeVm.Technology) ? string.Empty : employeeVm.Technology;
+            employeeVm.Id = id;
+        }
+
+        private async Task EditEmployee(EmployeeTableVM employeeVm)
+        {
             var employeeToUpdate = new UpdateEmployee
             {
                 Id = employeeVm.Id,
@@ -144,10 +192,10 @@ namespace Client.Components
             var success = await EmployeesHttpRepository.UpdateEmployeeAsync(employeeToUpdate);
 
             if (success)
-                args.Data.TechnologyNamesFlattened = UpdateDisplayedEmployeeTechnologies(args.Data);
+                employeeVm.TechnologyNamesFlattened = UpdateDisplayedEmployeeTechnologiesAfterEdit(employeeVm);
         }
 
-        private void RemoveEmployeeTechnology(UpdateEmployee employee, string technology)
+        private static void RemoveEmployeeTechnology(UpdateEmployee employee, string technology)
         {
             if (string.IsNullOrEmpty(technology))
                 return;
@@ -155,7 +203,7 @@ namespace Client.Components
             employee.TechnologyNames.Remove(technology);
         }
 
-        private void AddEmployeeTechnology(UpdateEmployee employee, string technology)
+        private static void AddEmployeeTechnology(UpdateEmployee employee, string technology)
         {
             if (string.IsNullOrEmpty(technology))
                 return;
@@ -163,7 +211,7 @@ namespace Client.Components
             employee.TechnologyNames.Add(technology);
         }
 
-        private string UpdateDisplayedEmployeeTechnologies(EmployeeTableVM data)
+        private static string UpdateDisplayedEmployeeTechnologiesAfterEdit(EmployeeTableVM data)
         {
             var flattenedTechnologies = data.TechnologyNamesFlattened;
             var technologyToRemove = data.TechnologyToRemove;
@@ -176,6 +224,11 @@ namespace Client.Components
                 flattenedTechnologies = flattenedTechnologies + ", " + technologyToAdd;
 
             return flattenedTechnologies;
+        }
+
+        private async Task DeleteEmployee(int id)
+        {
+            var result = await EmployeesHttpRepository.DeleteEmployeeAsync(id);
         }
     }
 }

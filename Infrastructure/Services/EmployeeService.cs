@@ -29,12 +29,13 @@ namespace Infrastructure.Services
             return employee;
         }
 
-        public async Task AddAsync(CreateEmployee e)
+        public async Task<int> AddAsync(CreateEmployee e)
         {
             if (e is null)
                 throw new ArgumentNullException(nameof(e), "Created employee can not be null");
 
-            await _employeeRepository.AddAsync(e);
+            var id = await _employeeRepository.AddAsync(e);
+            return id;
         }
 
         public async Task UpdateAsync(UpdateEmployee e)
