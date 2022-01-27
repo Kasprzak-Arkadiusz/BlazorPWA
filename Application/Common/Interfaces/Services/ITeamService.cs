@@ -11,7 +11,7 @@ namespace Application.Common.Interfaces.Services
 
         public Task<GetTeamDetailsQuery> GetByIdAsync(int id);
 
-        public Task AddAsync(CreateTeam t);
+        public Task<int> AddAsync(CreateTeam t);
 
         public Task UpdateAsync(UpdateTeam t);
 

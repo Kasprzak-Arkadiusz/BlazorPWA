@@ -29,12 +29,14 @@ namespace Infrastructure.Services
             return projects;
         }
 
-        public async Task AddAsync(CreateProject p)
+        public async Task<int> AddAsync(CreateProject p)
         {
             if (p is null)
                 throw new ArgumentNullException(nameof(p), "Created project can not be null");
 
-            await _projectRepository.AddAsync(p);
+            var id = await _projectRepository.AddAsync(p);
+
+            return id;
         }
 
         public async Task UpdateAsync(UpdateProject p)

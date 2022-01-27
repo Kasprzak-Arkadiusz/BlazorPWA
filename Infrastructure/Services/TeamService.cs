@@ -30,12 +30,14 @@ namespace Infrastructure.Services
             return team;
         }
 
-        public async Task AddAsync(CreateTeam t)
+        public async Task<int> AddAsync(CreateTeam t)
         {
             if (t is null)
                 throw new ArgumentNullException(nameof(t), "Created team can not be null");
 
-            await _teamRepository.AddAsync(t);
+            var id = await _teamRepository.AddAsync(t);
+
+            return id;
         }
 
         public async Task UpdateAsync(UpdateTeam t)

@@ -1,4 +1,5 @@
-﻿using Application.Queries.Technology;
+﻿using Application.Commands.Team;
+using Application.Queries.Technology;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,7 +10,9 @@ namespace Client.HttpRepository.Technologies
 {
     public class TechnologiesHttpRepository : BaseHttpRepository, ITechnologiesHttpRepository
     {
-        public TechnologiesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        private const string Url = "Technologies";
+
+        public TechnologiesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
         {
         }
 
@@ -17,7 +20,7 @@ namespace Client.HttpRepository.Technologies
         {
             // TODO load from cache in the future
 
-            var response = await HttpClient.GetAsync("Technologies");
+            var response = await HttpClient.GetAsync(Url);
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -28,6 +31,24 @@ namespace Client.HttpRepository.Technologies
             var technologies = JsonSerializer.Deserialize<List<GetTechnologiesQuery>>(content, Options);
 
             return technologies;
+        }
+
+        public async Task<int> CreateTechnologyAsync(CreateTeam technologyToAdd)
+        {
+            var id = await CreateAsync(technologyToAdd);
+            return id;
+        }
+
+        public async Task<bool> UpdateTechnologyAsync(UpdateTeam technologyToUpdate)
+        {
+            var success = await UpdateAsync(technologyToUpdate);
+            return success;
+        }
+
+        public async Task<bool> DeleteTechnologyAsync(int id)
+        {
+            var success = await DeleteAsync(id);
+            return success;
         }
     }
 }

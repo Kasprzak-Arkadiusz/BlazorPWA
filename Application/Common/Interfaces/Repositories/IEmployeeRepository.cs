@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.Employee;
+﻿using Application.Commands.Employee;
 using Application.Queries.Employee;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces.Repositories
 {

@@ -11,7 +11,7 @@ namespace Application.Common.Interfaces.Services
 
         public Task<GetProjectDetailQuery> GetByIdAsync(int id);
 
-        public Task AddAsync(CreateProject p);
+        public Task<int> AddAsync(CreateProject p);
 
         public Task UpdateAsync(UpdateProject p);
 

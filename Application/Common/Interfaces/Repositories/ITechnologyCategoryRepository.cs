@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.TechnologyCategory;
+﻿using Application.Commands.TechnologyCategory;
 using Application.Queries.TechnologyCategory;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces.Repositories
 {
     public interface ITechnologyCategoryRepository
     {
-        Task<List<GetTechnologyCategoriesQuery>> GetAllAsync();
-        Task<GetTechnologyCategoryDetailQuery> GetByIdAsync(int id);
+        public Task<List<GetTechnologyCategoriesQuery>> GetAllAsync();
 
-        Task AddAsync(CreateTechnologyCategory t);
+        public Task<GetTechnologyCategoryDetailQuery> GetByIdAsync(int id);
 
-        Task UpdateAsync(UpdateTechnologyCategory t);
+        public Task<int> AddAsync(CreateTechnologyCategory t);
 
-        Task<bool> DeleteAsync(int id);
+        public Task UpdateAsync(UpdateTechnologyCategory t);
+
+        public Task<bool> DeleteAsync(int id);
     }
 }

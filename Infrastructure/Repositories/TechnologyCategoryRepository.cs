@@ -48,12 +48,14 @@ namespace Infrastructure.Repositories
             return category;
         }
 
-        public async Task AddAsync(CreateTechnologyCategory t)
+        public async Task<int> AddAsync(CreateTechnologyCategory t)
         {
             var category = _mapper.Map<TechnologyCategory>(t);
 
             await _context.TechnologyCategories.AddAsync(category);
             await _context.SaveChangesAsync();
+
+            return category.Id;
         }
 
         public async Task UpdateAsync(UpdateTechnologyCategory t)

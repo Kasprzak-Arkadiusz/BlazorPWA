@@ -29,12 +29,14 @@ namespace Infrastructure.Services
             return category;
         }
 
-        public async Task AddAsync(CreateTechnologyCategory t)
+        public async Task<int> AddAsync(CreateTechnologyCategory t)
         {
             if (t is null)
                 throw new ArgumentNullException(nameof(t), "Created technology category can not be null");
 
-            await _technologyCategoryRepository.AddAsync(t);
+            var id = await _technologyCategoryRepository.AddAsync(t);
+
+            return id;
         }
 
         public async Task UpdateAsync(UpdateTechnologyCategory t)

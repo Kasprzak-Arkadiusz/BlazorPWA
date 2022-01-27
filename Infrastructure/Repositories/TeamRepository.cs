@@ -47,7 +47,7 @@ namespace Infrastructure.Repositories
             return team;
         }
 
-        public async Task AddAsync(CreateTeam t)
+        public async Task<int> AddAsync(CreateTeam t)
         {
             var team = _mapper.Map<Team>(t);
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Name == t.ProjectName);
@@ -56,6 +56,8 @@ namespace Infrastructure.Repositories
 
             await _context.Teams.AddAsync(team);
             await _context.SaveChangesAsync();
+
+            return team.Id;
         }
 
         public async Task UpdateAsync(UpdateTeam t)

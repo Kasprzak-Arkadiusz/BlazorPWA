@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.Project;
+﻿using Application.Commands.Project;
 using Application.Queries.Project;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces.Repositories
 {
     public interface IProjectRepository
     {
-        Task<List<GetProjectsQuery>> GetAllAsync();
+        public Task<List<GetProjectsQuery>> GetAllAsync();
 
-        Task<GetProjectDetailQuery> GetByIdAsync(int id);
+        public Task<GetProjectDetailQuery> GetByIdAsync(int id);
 
-        Task AddAsync(CreateProject p);
+        public Task<int> AddAsync(CreateProject p);
 
-        Task UpdateAsync(UpdateProject p);
+        public Task UpdateAsync(UpdateProject p);
 
-        Task<bool> DeleteAsync(int id);
+        public Task<bool> DeleteAsync(int id);
     }
 }

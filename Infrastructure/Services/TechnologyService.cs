@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.Technology;
+﻿using Application.Commands.Technology;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.Queries.Technology;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -29,12 +29,14 @@ namespace Infrastructure.Services
             return technology;
         }
 
-        public async Task AddAsync(CreateTechnology t)
+        public async Task<int> AddAsync(CreateTechnology t)
         {
             if (t is null)
                 throw new ArgumentNullException(nameof(t), "Created technology can not be null");
 
-            await _technologyRepository.AddAsync(t);
+            var id = await _technologyRepository.AddAsync(t);
+
+            return id;
         }
 
         public async Task UpdateAsync(UpdateTechnology t)

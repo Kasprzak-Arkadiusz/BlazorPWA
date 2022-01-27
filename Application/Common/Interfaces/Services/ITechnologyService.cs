@@ -11,7 +11,7 @@ namespace Application.Common.Interfaces.Services
 
         public Task<GetTechnologyDetailsQuery> GetByIdAsync(int id);
 
-        public Task AddAsync(CreateTechnology t);
+        public Task<int> AddAsync(CreateTechnology t);
 
         public Task UpdateAsync(UpdateTechnology t);
 

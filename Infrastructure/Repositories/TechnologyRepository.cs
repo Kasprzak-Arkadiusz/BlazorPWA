@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories
             return technology;
         }
 
-        public async Task AddAsync(CreateTechnology t)
+        public async Task<int> AddAsync(CreateTechnology t)
         {
             var technology = _mapper.Map<Technology>(t);
             var category = await _context.TechnologyCategories.FindAsync(t.TechnologyCategoryId);
@@ -59,6 +59,8 @@ namespace Infrastructure.Repositories
 
             await _context.Technologies.AddAsync(technology);
             await _context.SaveChangesAsync();
+
+            return technology.Id;
         }
 
         public async Task UpdateAsync(UpdateTechnology t)

@@ -3,8 +3,6 @@ using Application.Queries.Employee;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,13 +10,14 @@ namespace Client.HttpRepository.Employees
 {
     public class EmployeesHttpRepository : BaseHttpRepository, IEmployeesHttpRepository
     {
-        public EmployeesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
-        {
-        }
+        private const string Url = "Employees";
+
+        public EmployeesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
+        { }
 
         public async Task<List<GetEmployeesQuery>> GetAllEmployeesAsync()
         {
-            var response = await HttpClient.GetAsync("Employees");
+            var response = await HttpClient.GetAsync(Url);
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -33,31 +32,20 @@ namespace Client.HttpRepository.Employees
 
         public async Task<int> CreateEmployeeAsync(CreateEmployee employeeToAdd)
         {
-            var json = JsonSerializer.Serialize(employeeToAdd);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("Employees", content);
-
-            if (!response.IsSuccessStatusCode) 
-                return 0;
-
-            var id = await response.Content.ReadFromJsonAsync<int>();
+            var id = await CreateAsync(employeeToAdd);
             return id;
         }
 
         public async Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate)
         {
-            var json = JsonSerializer.Serialize(employeeToUpdate);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PutAsync("Employees", content);
-
-            return response.IsSuccessStatusCode;
+            var success = await UpdateAsync(employeeToUpdate);
+            return success;
         }
 
         public async Task<bool> DeleteEmployeeAsync(int id)
         {
-            var response = await HttpClient.DeleteAsync($"Employees/{id}");
-
-            return response.IsSuccessStatusCode;
+            var success = await DeleteAsync(id);
+            return success;
         }
     }
 }

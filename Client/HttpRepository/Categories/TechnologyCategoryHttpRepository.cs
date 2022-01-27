@@ -1,4 +1,5 @@
-﻿using Application.Queries.TechnologyCategory;
+﻿using Application.Commands.TechnologyCategory;
+using Application.Queries.TechnologyCategory;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,13 +10,15 @@ namespace Client.HttpRepository.Categories
 {
     public class TechnologyCategoryHttpRepository : BaseHttpRepository, ITechnologyCategoryHttpRepository
     {
-        public TechnologyCategoryHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        private const string Url = "TechnologyCategories";
+
+        public TechnologyCategoryHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
         {
         }
 
         public async Task<List<GetTechnologyCategoriesQuery>> GetAllCategoriesAsync()
         {
-            var response = await HttpClient.GetAsync("TechnologyCategories");
+            var response = await HttpClient.GetAsync(Url);
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -26,6 +29,24 @@ namespace Client.HttpRepository.Categories
             var technologies = JsonSerializer.Deserialize<List<GetTechnologyCategoriesQuery>>(content, Options);
 
             return technologies;
+        }
+
+        public async Task<int> CreateTechnologyCategoryAsync(CreateTechnologyCategory categoryToAdd)
+        {
+            var id = await CreateAsync(categoryToAdd);
+            return id;
+        }
+
+        public async Task<bool> UpdateTechnologyCategoryAsync(UpdateTechnologyCategory categoryToUpdate)
+        {
+            var success = await UpdateAsync(categoryToUpdate);
+            return success;
+        }
+
+        public async Task<bool> DeleteTechnologyCategoryAsync(int id)
+        {
+            var success = await DeleteAsync(id);
+            return success;
         }
     }
 }

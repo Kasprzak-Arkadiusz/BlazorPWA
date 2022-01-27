@@ -52,7 +52,7 @@ namespace Infrastructure.Repositories
             return project;
         }
 
-        public async Task AddAsync(CreateProject p)
+        public async Task<int> AddAsync(CreateProject p)
         {
             var project = _mapper.Map<Project>(p);
             var technologies = await _context.Technologies.Where(t => p.TechnologyNames.Contains(t.Name)).ToListAsync();
@@ -71,6 +71,8 @@ namespace Infrastructure.Repositories
 
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
+
+            return project.Id;
         }
 
         public async Task UpdateAsync(UpdateProject updateProject)
