@@ -11,7 +11,7 @@ namespace Client.Pages
         public List<GetTeamsQuery> TeamList { get; set; } = new();
 
         [Inject]
-        public ITeamHttpRepository TeamRepository { get; set; }
+        public ITeamsHttpRepository TeamRepository { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

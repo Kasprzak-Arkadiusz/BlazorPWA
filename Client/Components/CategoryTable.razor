@@ -1,10 +1,20 @@
 ﻿@using Application.Queries.TechnologyCategory
+@using Client.ViewModels
+@using _Imports = Client._Imports
 @if (Categories.Count > 0)
 {
-    <SfGrid DataSource="@Categories" AllowFiltering="true" AllowPaging="true">
+    <SfGrid DataSource="@CategoryTableVms" AllowFiltering="true" AllowPaging="true"
+            Toolbar="@(new List<string> { "Add", "Edit", "Update", "Cancel" , "Delete" })">
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+            <HeaderTemplate>
+                <span>@GetHeaderText(context as TechnologyCategoryTableVm)</span>
+            </HeaderTemplate>
+        </GridEditSettings>
         <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
         <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+        <GridEvents OnActionBegin="ActionBeginHandler" TValue="TechnologyCategoryTableVm"></GridEvents>
         <GridColumns>
+            <GridColumn Field="@nameof(TechnologyCategoryTableVm.Id)" Visible="false"></GridColumn>
             <GridColumn Field="@nameof(GetTechnologyCategoriesQuery.Name)" HeaderText="Name"></GridColumn>
         </GridColumns>
     </SfGrid>

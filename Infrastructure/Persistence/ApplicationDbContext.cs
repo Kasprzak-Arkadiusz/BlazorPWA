@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -28,5 +29,10 @@ namespace Infrastructure.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder
+                .LogTo(Console.WriteLine)
+                .EnableDetailedErrors();
     }
 }

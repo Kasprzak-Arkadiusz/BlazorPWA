@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Client.HttpRepository.Categories
 {
-    public interface ITechnologyCategoryHttpRepository
+    public interface ITechnologyCategoriesHttpRepository
     {
         Task<List<GetTechnologyCategoriesQuery>> GetAllCategoriesAsync();
 

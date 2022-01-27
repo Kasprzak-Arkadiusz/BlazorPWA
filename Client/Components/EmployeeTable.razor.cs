@@ -2,39 +2,37 @@
 using Application.Common.Utils;
 using Application.Queries.Employee;
 using Client.HttpRepository.Employees;
-using Client.Utilities;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.ViewModels;
+using Client.Utilities;
+using Application.Queries.Team;
+using Application.Queries.Technology;
+using Client.Utilities.DropDownSources;
 
 namespace Client.Components
 {
     public partial class EmployeeTable
     {
         [Parameter]
-        public List<GetEmployeesQuery> Employees { get; set; } = new();
+        public List<GetEmployeesQuery> Employees { get; set; }
+
+        [Parameter]
+        public List<GetTechnologiesQuery> Technologies { get; set; }
+
+        [Parameter]
+        public List<GetTeamsQuery> Teams { get; set; }
 
         [Inject]
         public IEmployeesHttpRepository EmployeesHttpRepository { get; set; }
 
-        [Inject]
-        public IDropDownFiller DropDownFiller { get; set; }
-
-        private List<DropDownListItem> TechnologiesDropDownSource { get; set; }
-        private List<DropDownListItem> TeamsDropDownSource { get; set; }
-        private List<DropDownListItem> EditTeamDropDownSource { get; set; }
-        private List<DropDownListItem> EditTechnologiesToRemoveDropDownSource { get; set; }
-        private List<DropDownListItem> EditTechnologiesToAddDropDownSource { get; set; }
-        private List<DropDownListItem> CreateTechnologiesToAddDropDownSource { get; set; }
-        private List<EmployeeTableVM> EmployeeTableVms { get; set; }
-        private SfGrid<EmployeeTableVM> EmployeesGrid { get; set; }
-
-        private const string DefaultFilterText = "All";
-        private const string DefaultFilterValue = "All";
+        private EmployeeDropDownSources DropDownSources { get; set; } = new();
+        private List<EmployeeTableVm> EmployeeTableVms { get; set; }
+        private SfGrid<EmployeeTableVm> EmployeesGrid { get; set; }
 
         private bool _isEdit;
 
@@ -46,7 +44,7 @@ namespace Client.Components
 
         private void FlattenEmployeeTableVms()
         {
-            EmployeeTableVms = Employees.Select(e => new EmployeeTableVM
+            EmployeeTableVms = Employees.Select(e => new EmployeeTableVm
             {
                 Id = e.Id,
                 FirstName = e.FirstName,
@@ -59,40 +57,39 @@ namespace Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            TechnologiesDropDownSource = await DropDownFiller.FillTechnologiesDropDownSource(TechnologiesDropDownSource, DefaultFilterValue, DefaultFilterText);
-            TeamsDropDownSource = await DropDownFiller.FillTeamsDropDownSource(TeamsDropDownSource, DefaultFilterValue, DefaultFilterText);
+            DropDownSources.TechnologiesFilter = await DropDownFiller.FillTechnologiesDropDownSource(Technologies);
+            DropDownSources.TeamsFilter = await DropDownFiller.FillTeamsDropDownSource(Teams);
 
             await base.OnInitializedAsync();
         }
 
-        private static string GetHeaderText(EmployeeTableVM employeeTableVm)
+        private static string GetHeaderText(EmployeeTableVm employeeTableVm)
         {
             return employeeTableVm.Id == 0 ? "Add new employee" : "Edit employee details";
         }
 
         private async Task SelectedTechnologyChangeHandler(ChangeEventArgs<string, DropDownListItem> args)
         {
-            if (args.ItemData.Text == DefaultFilterValue)
-            {
-                await EmployeesGrid.ClearFilteringAsync(nameof(EmployeeTableVM.TechnologyNamesFlattened));
-                return;
-            }
-
-            await EmployeesGrid.FilterByColumnAsync(nameof(EmployeeTableVM.TechnologyNamesFlattened), "contains", args.ItemData.Text);
+            await FilterValueChangeHandler(args, "contains", nameof(EmployeeTableVm.TechnologyNamesFlattened));
         }
 
         private async Task SelectedTeamChangeHandler(ChangeEventArgs<string, DropDownListItem> args)
         {
-            if (args.ItemData.Text == DefaultFilterValue)
+            await FilterValueChangeHandler(args, "contains", nameof(EmployeeTableVm.TeamId));
+        }
+
+        private async Task FilterValueChangeHandler(ChangeEventArgs<string, DropDownListItem> args, string filterOperator, string nameOfColumn)
+        {
+            if (args.ItemData.Text == DropDownFiller.DefaultFilterText)
             {
-                await EmployeesGrid.ClearFilteringAsync(nameof(GetEmployeesQuery.TeamId));
+                await EmployeesGrid.ClearFilteringAsync(nameOfColumn);
                 return;
             }
 
-            await EmployeesGrid.FilterByColumnAsync(nameof(GetEmployeesQuery.TeamId), "contains", args.ItemData.Text);
+            await EmployeesGrid.FilterByColumnAsync(nameOfColumn, filterOperator, args.ItemData.Text);
         }
 
-        private async Task ActionBeginHandler(ActionEventArgs<EmployeeTableVM> args)
+        private async Task ActionBeginHandler(ActionEventArgs<EmployeeTableVm> args)
         {
             switch (args.RequestType)
             {
@@ -125,39 +122,46 @@ namespace Client.Components
 
         private void InitCreateDropdowns()
         {
-            CreateTechnologiesToAddDropDownSource = TechnologiesDropDownSource
-                    .Where(td => td.Value != DefaultFilterValue)
+            DropDownSources.CreateTechnologiesToAdd = Technologies
                     .Select(td => new DropDownListItem
                     {
-                        Value = td.Text,
-                        Text = td.Text
+                        Value = td.Name,
+                        Text = td.Name
                     }).ToList();
 
-            EditTeamDropDownSource = TeamsDropDownSource.Where(t => t.Value != DefaultFilterValue).ToList();
+            DropDownSources.EditTeam = Teams.Select(t => new DropDownListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Id.ToString()
+            }).ToList();
         }
 
         private void InitEditDropdowns(string employeeTechnologies)
         {
             var technologies = employeeTechnologies.Split(", ").ToList();
 
-            EditTechnologiesToAddDropDownSource = TechnologiesDropDownSource
-                .Where(td => technologies.All(t => t != td.Text) && td.Value != DefaultFilterValue)
+            DropDownSources.EditTechnologiesToAdd = Technologies
+                .Where(td => technologies.All(t => t != td.Name))
                 .Select(td => new DropDownListItem
                 {
-                    Value = td.Text,
-                    Text = td.Text
+                    Value = td.Name,
+                    Text = td.Name
                 }).ToList();
 
-            EditTechnologiesToRemoveDropDownSource = technologies.Select(t => new DropDownListItem
+            DropDownSources.EditTechnologiesToRemove = technologies.Select(t => new DropDownListItem
             {
                 Value = t,
                 Text = t
             }).ToList();
 
-            EditTeamDropDownSource = TeamsDropDownSource.Where(t => t.Value != DefaultFilterValue).ToList();
+            DropDownSources.EditTeam = Teams.Select(t => new DropDownListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Id.ToString()
+            }).ToList();
         }
 
-        private async Task AddEmployee(EmployeeTableVM employeeVm)
+        private async Task AddEmployee(EmployeeTableVm employeeVm)
         {
             var employeeToAdd = new CreateEmployee
             {
@@ -169,12 +173,12 @@ namespace Client.Components
             };
 
             var id = await EmployeesHttpRepository.CreateEmployeeAsync(employeeToAdd);
-            
+
             employeeVm.TechnologyNamesFlattened = string.IsNullOrEmpty(employeeVm.Technology) ? string.Empty : employeeVm.Technology;
             employeeVm.Id = id;
         }
 
-        private async Task EditEmployee(EmployeeTableVM employeeVm)
+        private async Task EditEmployee(EmployeeTableVm employeeVm)
         {
             var employeeToUpdate = new UpdateEmployee
             {
@@ -211,7 +215,7 @@ namespace Client.Components
             employee.TechnologyNames.Add(technology);
         }
 
-        private static string UpdateDisplayedEmployeeTechnologiesAfterEdit(EmployeeTableVM data)
+        private static string UpdateDisplayedEmployeeTechnologiesAfterEdit(EmployeeTableVm data)
         {
             var flattenedTechnologies = data.TechnologyNamesFlattened;
             var technologyToRemove = data.TechnologyToRemove;
@@ -228,7 +232,7 @@ namespace Client.Components
 
         private async Task DeleteEmployee(int id)
         {
-            var result = await EmployeesHttpRepository.DeleteEmployeeAsync(id);
+            await EmployeesHttpRepository.DeleteEmployeeAsync(id);
         }
     }
 }

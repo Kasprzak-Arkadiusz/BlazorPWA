@@ -18,8 +18,6 @@ namespace Client.HttpRepository.Technologies
 
         public async Task<List<GetTechnologiesQuery>> GetAllTechnologiesAsync()
         {
-            // TODO load from cache in the future
-
             var response = await HttpClient.GetAsync(Url);
             var content = await response.Content.ReadAsStringAsync();
 

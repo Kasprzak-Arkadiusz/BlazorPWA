@@ -26,7 +26,11 @@ namespace Client.HttpRepository
             var response = await HttpClient.PostAsync(_requestUri, content);
 
             if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
                 return 0;
+            }
+                
 
             var id = await response.Content.ReadFromJsonAsync<int>();
             return id;

@@ -1,42 +1,27 @@
 ﻿using Application.Common.Utils;
 using Application.Queries.Team;
 using Application.Queries.Technology;
-using Client.HttpRepository.Teams;
-using Client.HttpRepository.Technologies;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Client.Utilities
 {
-    public class DropDownFiller : IDropDownFiller
+    public static class DropDownFiller
     {
-        private readonly ITechnologiesHttpRepository _technologiesHttpRepository;
-        private readonly ITeamHttpRepository _teamHttpRepository;
+        public static string DefaultFilterValue { get; } = "All";
+        public static string DefaultFilterText { get; } = "All";
 
-        public DropDownFiller(ITechnologiesHttpRepository technologiesHttpRepository,
-            ITeamHttpRepository teamHttpRepository)
+        public static async Task<List<DropDownListItem>> FillTechnologiesDropDownSource(List<GetTechnologiesQuery> technologies)
         {
-            _technologiesHttpRepository = technologiesHttpRepository;
-            _teamHttpRepository = teamHttpRepository;
+            return await DropDownHelper<GetTechnologiesQuery>.ConvertToDropDownSource(technologies,
+                technologies.Select(t => t.Name).ToList(), DefaultFilterValue, DefaultFilterText);
         }
 
-        public async Task<List<DropDownListItem>> FillTechnologiesDropDownSource(List<DropDownListItem> technologiesDropDownSource,
-            string filterValue, string filterText)
+        public static async Task<List<DropDownListItem>> FillTeamsDropDownSource(List<GetTeamsQuery> teams)
         {
-            var technologies = await _technologiesHttpRepository.GetAllTechnologiesAsync();
-
-            return DropDownHelper<GetTechnologiesQuery>.ConvertToDropDownSource(technologies, technologies.Select(t => t.Name).ToList(),
-                    filterValue, filterText);
-        }
-
-        public async Task<List<DropDownListItem>> FillTeamsDropDownSource(List<DropDownListItem> teamsDropDownSource,
-            string filterValue, string filterText)
-        {
-            var teams = await _teamHttpRepository.GetAllTeamsQuery();
-
-            return DropDownHelper<GetTeamsQuery>.ConvertToDropDownSource(teams, teams.Select(t => t.Id.ToString()).ToList(),
-                    filterValue, filterText);
+            return await DropDownHelper<GetTeamsQuery>.ConvertToDropDownSource(teams,
+                teams.Select(t => t.Id.ToString()).ToList(), DefaultFilterValue, DefaultFilterText);
         }
     }
 }

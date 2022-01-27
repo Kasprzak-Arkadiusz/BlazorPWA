@@ -29,12 +29,10 @@ namespace Client
 
             builder.Services.AddTransient<IEmployeesHttpRepository, EmployeesHttpRepository>();
             builder.Services.AddTransient<ITechnologiesHttpRepository, TechnologiesHttpRepository>();
-            builder.Services.AddTransient<ITechnologyCategoryHttpRepository, TechnologyCategoryHttpRepository>();
-            builder.Services.AddTransient<ITeamHttpRepository, TeamHttpRepository>();
+            builder.Services.AddTransient<ITechnologyCategoriesHttpRepository, TechnologyCategoriesHttpRepository>();
+            builder.Services.AddTransient<ITeamsHttpRepository, TeamsHttpRepository>();
             builder.Services.AddTransient<IProjectsHttpRepository, ProjectsHttpRepository>();
-
-            builder.Services.AddTransient<IDropDownFiller, DropDownFiller>();
-
+            
             await builder.Build().RunAsync();
         }
     }

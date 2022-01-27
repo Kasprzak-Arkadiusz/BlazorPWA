@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Client.HttpRepository.Categories
 {
-    public class TechnologyCategoryHttpRepository : BaseHttpRepository, ITechnologyCategoryHttpRepository
+    public class TechnologyCategoriesHttpRepository : BaseHttpRepository, ITechnologyCategoriesHttpRepository
     {
         private const string Url = "TechnologyCategories";
 
-        public TechnologyCategoryHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
+        public TechnologyCategoriesHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
         {
         }
 

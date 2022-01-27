@@ -11,7 +11,7 @@ namespace Client.Pages
         public List<GetTechnologyCategoriesQuery> CategoryList { get; set; } = new();
 
         [Inject]
-        public ITechnologyCategoryHttpRepository TechnologyCategoryHttpRepository { get; set; }
+        public ITechnologyCategoriesHttpRepository TechnologyCategoryHttpRepository { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

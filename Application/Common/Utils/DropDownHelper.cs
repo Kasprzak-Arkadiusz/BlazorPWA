@@ -1,12 +1,13 @@
 ﻿using Application.Common.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Common.Utils
 {
     public static class DropDownHelper<T> where T : IDropDownEntity
     {
-        public static List<DropDownListItem> ConvertToDropDownSource(List<T> values, List<string> texts, string defaultValue, string defaultText)
+        public static Task<List<DropDownListItem>> ConvertToDropDownSource(List<T> values, List<string> texts, string defaultValue, string defaultText)
         {
             if (values.Count != texts.Count)
                 throw new NotSameSizeException("Provided collections have different sizes");
@@ -17,7 +18,7 @@ namespace Application.Common.Utils
             if (!string.IsNullOrEmpty(defaultValue) && !string.IsNullOrEmpty(defaultText))
                 list.Insert(0, new DropDownListItem {Text = defaultText, Value = defaultValue});
 
-            return list;
+            return Task.FromResult(list);
         }
     }
 }

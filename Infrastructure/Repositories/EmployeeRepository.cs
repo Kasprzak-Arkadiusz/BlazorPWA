@@ -25,7 +25,8 @@ namespace Infrastructure.Repositories
 
         public async Task<List<GetEmployeesQuery>> GetAllAsync()
         {
-            var employees = await _context.Employees.Include(e => e.EmployeeTechnologies).Select(e => new GetEmployeesQuery
+            var employees = await _context.Employees.Include(e => e.EmployeeTechnologies)
+                .Select(e => new GetEmployeesQuery
             {
                 Id = e.Id,
                 FirstName = e.FirstName,

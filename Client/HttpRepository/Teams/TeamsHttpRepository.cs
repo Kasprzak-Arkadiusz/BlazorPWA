@@ -8,11 +8,11 @@ using Application.Commands.Team;
 
 namespace Client.HttpRepository.Teams
 {
-    public class TeamHttpRepository : BaseHttpRepository, ITeamHttpRepository
+    public class TeamsHttpRepository : BaseHttpRepository, ITeamsHttpRepository
     {
         private const string Url = "Teams";
 
-        public TeamHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
+        public TeamsHttpRepository(IHttpClientFactory httpClientFactory) : base(httpClientFactory, Url)
         {
         }
 

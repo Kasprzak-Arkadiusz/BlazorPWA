@@ -25,13 +25,14 @@ namespace Infrastructure.Repositories
 
         public async Task<List<GetProjectsQuery>> GetAllAsync()
         {
-            var projects = await _context.Projects
-                .Select(p => new GetProjectsQuery()
+            var projects = await _context.Projects.Include(p => p.ProjectTechnologies)
+                .Select(p => new GetProjectsQuery
                 {
                     Id = p.Id,
                     Name = p.Name,
                     StartDate = p.StartDate,
-                    TeamId = p.Team.Id
+                    TeamId = p.Team.Id,
+                    Technologies = p.ProjectTechnologies.Select(t => t.Technology.Name).ToList()
                 }).ToListAsync();
 
             return projects;
@@ -39,7 +40,8 @@ namespace Infrastructure.Repositories
 
         public async Task<GetProjectDetailQuery> GetByIdAsync(int id)
         {
-            var project = await _context.Projects.Select(p => new GetProjectDetailQuery
+            var project = await _context.Projects.Include(p => p.ProjectTechnologies)
+                .Select(p => new GetProjectDetailQuery
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -54,25 +56,35 @@ namespace Infrastructure.Repositories
 
         public async Task<int> AddAsync(CreateProject p)
         {
-            var project = _mapper.Map<Project>(p);
-            var technologies = await _context.Technologies.Where(t => p.TechnologyNames.Contains(t.Name)).ToListAsync();
-            var team = await _context.Teams.FindAsync(p.TeamId);
+            try {
+                var project = _mapper.Map<Project>(p);
+                var technologies = await _context.Technologies.Where(t => p.TechnologyNames.Contains(t.Name)).ToListAsync();
+                var team = await _context.Teams.FindAsync(p.TeamId);
 
-            project.Team = team;
+                project.Team = team;
 
-            foreach (var technology in technologies)
-            {
-                project.ProjectTechnologies.Add(new ProjectTechnology
+                project.ProjectTechnologies = new List<ProjectTechnology>();
+                foreach (var technology in technologies)
                 {
-                    Project = project,
-                    Technology = technology
-                });
+                    project.ProjectTechnologies.Add(new ProjectTechnology
+                    {
+                        Project = project,
+                        Technology = technology
+                    });
+                }
+
+                await _context.Projects.AddAsync(project);
+                await _context.SaveChangesAsync();
+
+                return project.Id;
             }
 
-            await _context.Projects.AddAsync(project);
-            await _context.SaveChangesAsync();
-
-            return project.Id;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
 
         public async Task UpdateAsync(UpdateProject updateProject)

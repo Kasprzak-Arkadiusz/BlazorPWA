@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Client.HttpRepository.Teams
 {
-    public interface ITeamHttpRepository
+    public interface ITeamsHttpRepository
     {
         Task<List<GetTeamsQuery>> GetAllTeamsQuery();
 
