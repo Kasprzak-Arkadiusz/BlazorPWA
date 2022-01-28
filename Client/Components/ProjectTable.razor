@@ -1,9 +1,10 @@
 ﻿@using Client.ViewModels
 @using Action = Syncfusion.Blazor.Grids.Action
 @using _Imports = Client._Imports
+@using Client.Utilities
 @if (Projects.Count > 0)
 {
-    <SfGrid DataSource="@ProjectTableVms" AllowFiltering="true" AllowPaging="true"
+    <SfGrid @ref="ProjectsGrid" DataSource="@ProjectTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> { "Add", "Edit", "Delete" })">
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
             <HeaderTemplate>
@@ -20,13 +21,13 @@
                             <SfTextBox ID="@nameof(ProjectTableVm.Name)" @bind-Value="@(project.Name)" Placeholder="Name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
                         </div>
                         <div class="form-group col-md-6">
-                            <SfDatePicker ID="@nameof(ProjectTableVm.StartDate)" TValue="DateTime" @bind-Value="@((context as ProjectTableVm).StartDate)"
+                            <SfDatePicker ID="@nameof(ProjectTableVm.StartDate)" TValue="DateTime" @bind-Value="@(project.StartDate)"
                                           Placeholder="Start date" FloatLabelType="FloatLabelType.Always"></SfDatePicker>
                         </div>
                         <div class="form-group col-md-6">
                             <div>
                                 <SfDropDownList ID="@nameof(ProjectTableVm.TeamId)" DataSource="DropDownSources.EditTeam" Placeholder="Team id"
-                                                @bind-Value="@((context as ProjectTableVm).TeamId)"
+                                                @bind-Value="@(project.TeamId)"
                                                 TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
                                     <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                                 </SfDropDownList>
@@ -38,7 +39,7 @@
                                 <div>
                                     <label style="margin: 0;">Technology to remove</label>
                                     <SfDropDownList ID="@nameof(ProjectTableVm.TechnologyToRemove)" DataSource="DropDownSources.EditTechnologiesToRemove" Placeholder="Technology to remove"
-                                                    @bind-Value="@((context as ProjectTableVm).TechnologyToRemove)"
+                                                    @bind-Value="@(project.TechnologyToRemove)"
                                                     TItem="DropDownListItem" TValue="string">
                                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                                     </SfDropDownList>
@@ -48,7 +49,7 @@
                                 <div>
                                     <label style="margin: 0;">Technology to add</label>
                                     <SfDropDownList ID="@nameof(ProjectTableVm.TechnologyToAdd)" DataSource="DropDownSources.EditTechnologiesToAdd" Placeholder="Technology to add"
-                                                    @bind-Value="@((context as ProjectTableVm).TechnologyToAdd)"
+                                                    @bind-Value="@(project.TechnologyToAdd)"
                                                     TItem="DropDownListItem" TValue="string">
                                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                                     </SfDropDownList>
@@ -61,7 +62,7 @@
                                 <div>
                                     <label style="margin: 0;">Technology</label>
                                     <SfDropDownList ID="@nameof(ProjectTableVm.Technology)" DataSource="DropDownSources.CreateTechnologiesToAdd" Placeholder="Technology"
-                                                    @bind-Value="@((context as ProjectTableVm).Technology)"
+                                                    @bind-Value="@(project.Technology)"
                                                     TItem="DropDownListItem" TValue="string">
                                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                                     </SfDropDownList>
@@ -78,11 +79,12 @@
         <GridColumns>
             <GridColumn Field="@nameof(ProjectTableVm.Id)" Visible="false"></GridColumn>
             <GridColumn Field="@nameof(ProjectTableVm.Name)" HeaderText="Project name"></GridColumn>
-            <GridColumn Field="@nameof(ProjectTableVm.StartDate)" HeaderText="Start date"></GridColumn>
+            <GridColumn Field="@nameof(ProjectTableVm.StartDate)" HeaderText="Start date" Format="d" Type="ColumnType.DateTime"
+                        FilterSettings="@(new FilterSettings{ Operator = Operator.GreaterThan})"></GridColumn>
             <GridColumn Field="@nameof(ProjectTableVm.TechnologyNamesFlattened)" HeaderText="Technologies"
                         FilterSettings="@(new FilterSettings { Operator = Operator.Contains })" AllowEditing="false">
                 <FilterTemplate>
-                    <SfDropDownList Placeholder="All" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
+                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                         <DropDownListEvents TItem="DropDownListItem" TValue="string" ValueChange="@SelectedTechnologyChangeHandler"></DropDownListEvents>
                     </SfDropDownList>
@@ -90,7 +92,7 @@
             </GridColumn>
             <GridColumn Field="@nameof(ProjectTableVm.TeamId)" HeaderText="Team id">
                 <FilterTemplate>
-                    <SfDropDownList Placeholder="All" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
+                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                         <DropDownListEvents TItem="DropDownListItem" TValue="string" ValueChange="@SelectedTeamChangeHandler"></DropDownListEvents>
                     </SfDropDownList>

@@ -43,14 +43,13 @@ namespace API.Controllers
         {
             try
             {
-                await _technologyService.AddAsync(createTechnology);
+                var id = await _technologyService.AddAsync(createTechnology);
+                return Ok(id);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpPut]

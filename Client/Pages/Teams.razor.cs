@@ -3,19 +3,30 @@ using Client.HttpRepository.Teams;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Queries.Project;
+using Client.HttpRepository.Projects;
 
 namespace Client.Pages
 {
     public partial class Teams
     {
-        public List<GetTeamsQuery> TeamList { get; set; } = new();
+        private List<GetTeamsQuery> TeamList { get; set; } = new();
+        private List<GetProjectsQuery> ProjectList { get; set; } = new();
 
-        [Inject]
-        public ITeamsHttpRepository TeamRepository { get; set; }
+        [Inject] public ITeamsHttpRepository TeamsHttpRepository { get; set; }
+
+        [Inject] public IProjectsHttpRepository ProjectsHttpRepository { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            TeamList = await TeamRepository.GetAllTeamsQuery();
+            await FillLists();
+            await base.OnInitializedAsync();
+        }
+
+        private async Task FillLists()
+        {
+            TeamList = await TeamsHttpRepository.GetAllTeamsQuery();
+            ProjectList = await ProjectsHttpRepository.GetAllProjectsAsync();
         }
     }
 }

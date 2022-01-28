@@ -40,6 +40,8 @@ namespace Client.Components
         protected override async Task OnParametersSetAsync()
         {
             FlattenProjectTableVms();
+            DropDownSources.TechnologiesFilter = await DropDownFiller.FillTechnologiesDropDownSource(Technologies);
+            DropDownSources.TeamsFilter = await DropDownFiller.FillTeamsDropDownSource(Teams);
             await base.OnParametersSetAsync();
         }
 
@@ -50,17 +52,10 @@ namespace Client.Components
             {
                 Id = p.Id,
                 Name = p.Name,
-                TeamId = p.TeamId.ToString(),
+                TeamId = p.TeamId == 0 ? string.Empty : p.TeamId.ToString(),
                 StartDate = p.StartDate,
                 TechnologyNamesFlattened = string.Join(", ", p.Technologies)
             }).ToList();
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            DropDownSources.TechnologiesFilter = await DropDownFiller.FillTechnologiesDropDownSource(Technologies);
-            DropDownSources.TeamsFilter = await DropDownFiller.FillTeamsDropDownSource(Teams);
-            await base.OnInitializedAsync();
         }
 
         private static string GetHeaderText(ProjectTableVm projectTableVm)
@@ -75,7 +70,7 @@ namespace Client.Components
 
         private async Task SelectedTeamChangeHandler(ChangeEventArgs<string, DropDownListItem> args)
         {
-            await FilterValueChangeHandler(args, "contains", nameof(ProjectTableVm.TeamId));
+            await FilterValueChangeHandler(args, "equal", nameof(ProjectTableVm.TeamId));
         }
 
         private async Task FilterValueChangeHandler(ChangeEventArgs<string, DropDownListItem> args, string filterOperator, string nameOfColumn)
@@ -155,11 +150,12 @@ namespace Client.Components
                 Text = t
             }).ToList();
 
-            DropDownSources.EditTeam = Teams.Select(t => new DropDownListItem
-            {
-                Text = t.Id.ToString(),
-                Value = t.Id.ToString()
-            }).ToList();
+            DropDownSources.EditTeam = Teams.Where(t => string.IsNullOrEmpty(t.ProjectName))
+                .Select(t => new DropDownListItem
+                {
+                    Value = t.Id.ToString(),
+                    Text = t.Id.ToString()
+                }).ToList();
         }
 
         private async Task AddProject(ProjectTableVm projectTableVm)
@@ -167,7 +163,7 @@ namespace Client.Components
             var projectToAdd = new CreateProject
             {
                 Name = projectTableVm.Name,
-                TeamId = int.Parse(projectTableVm.TeamId),
+                TeamId = string.IsNullOrEmpty(projectTableVm.TeamId) ? 0 : int.Parse(projectTableVm.TeamId),
                 StartDate = projectTableVm.StartDate,
                 TechnologyNames = new List<string> { projectTableVm.Technology }
             };
@@ -177,24 +173,24 @@ namespace Client.Components
             projectTableVm.Id = id;
         }
 
-        private async Task EditProject(ProjectTableVm projectVm)
+        private async Task EditProject(ProjectTableVm projectTableVm)
         {
-            var projectToUpdate = new UpdateProject()
+            var projectToUpdate = new UpdateProject
             {
-                Id = projectVm.Id,
-                Name = projectVm.Name,
-                StartDate = projectVm.StartDate,
-                TeamId = int.Parse(projectVm.TeamId),
-                TechnologyNames = new List<string>(projectVm.TechnologyNamesFlattened.Split(", "))
+                Id = projectTableVm.Id,
+                Name = projectTableVm.Name,
+                StartDate = projectTableVm.StartDate,
+                TeamId = string.IsNullOrEmpty(projectTableVm.TeamId) ? 0 : int.Parse(projectTableVm.TeamId),
+                TechnologyNames = new List<string>(projectTableVm.TechnologyNamesFlattened.Split(", "))
             };
 
-            RemoveProjectTechnology(projectToUpdate, projectVm.TechnologyToRemove);
-            AddProjectTechnology(projectToUpdate, projectVm.TechnologyToAdd);
+            RemoveProjectTechnology(projectToUpdate, projectTableVm.TechnologyToRemove);
+            AddProjectTechnology(projectToUpdate, projectTableVm.TechnologyToAdd);
 
             var success = await ProjectsHttpRepository.UpdateProjectAsync(projectToUpdate);
 
             if (success)
-                projectVm.TechnologyNamesFlattened = UpdateDisplayedProjectTechnologiesAfterEdit(projectVm);
+                projectTableVm.TechnologyNamesFlattened = UpdateDisplayedProjectTechnologiesAfterEdit(projectTableVm);
         }
 
         private static void RemoveProjectTechnology(UpdateProject project, string technology)

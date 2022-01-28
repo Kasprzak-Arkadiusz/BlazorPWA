@@ -43,14 +43,13 @@ namespace API.Controllers
         {
             try
             {
-                await _teamService.AddAsync(createTeam);
+                var id = await _teamService.AddAsync(createTeam);
+                return Ok(id);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpPut]

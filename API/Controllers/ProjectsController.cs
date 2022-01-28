@@ -43,14 +43,13 @@ namespace API.Controllers
         {
             try
             {
-                await _projectService.AddAsync(createProject);
+                var id = await _projectService.AddAsync(createProject);
+                return Ok(id);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpPut]

@@ -2,7 +2,6 @@ using Application.Queries.Employee;
 using Application.Queries.Team;
 using Application.Queries.Technology;
 using Client.HttpRepository.Employees;
-using Client.HttpRepository.Projects;
 using Client.HttpRepository.Teams;
 using Client.HttpRepository.Technologies;
 using Microsoft.AspNetCore.Components;

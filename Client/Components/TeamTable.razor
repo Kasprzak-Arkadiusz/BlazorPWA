@@ -1,12 +1,40 @@
 ﻿@using Application.Queries.Team
+@using Client.ViewModels
 @if (Teams.Count > 0)
 {
-    <SfGrid DataSource="@Teams" AllowFiltering="true" AllowPaging="true">
+    <SfGrid DataSource="@TeamTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
+            Toolbar="@(new List<string> { "Add", "Delete" })">
+        <GridEditSettings AllowAdding="true" AllowDeleting="true" Mode="EditMode.Dialog">
+            <HeaderTemplate>
+                <span>Add new team</span>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    var team = context as TeamTableVm;
+                }
+
+                <div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div>
+                                <SfDropDownList Width="200px" PopupWidth="auto" ID="@nameof(TeamTableVm.ProjectName)" 
+                                                DataSource="CreateProjects" Placeholder="Project name"
+                                                @bind-Value="@(team.ProjectName)"
+                                                TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Template>
+        </GridEditSettings>
         <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+        <GridEvents OnActionBegin="ActionBeginHandler" TValue="TeamTableVm"></GridEvents>
         <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
         <GridColumns>
-            <GridColumn Field="@nameof(GetTeamsQuery.Id)" HeaderText="Team id"></GridColumn>
-            <GridColumn Field="@nameof(GetTeamsQuery.ProjectName)" HeaderText="Project name"></GridColumn>
+            <GridColumn Field="@nameof(GetTeamsQuery.Id)" HeaderText="Team id" AllowEditing="false"></GridColumn>
+            <GridColumn Field="@nameof(GetTeamsQuery.ProjectName)" AllowEditing="false" HeaderText="Project name"></GridColumn>
         </GridColumns>
     </SfGrid>
 }

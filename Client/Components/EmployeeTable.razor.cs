@@ -39,6 +39,8 @@ namespace Client.Components
         protected override async Task OnParametersSetAsync()
         {
             FlattenEmployeeTableVms();
+            DropDownSources.TechnologiesFilter = await DropDownFiller.FillTechnologiesDropDownSource(Technologies);
+            DropDownSources.TeamsFilter = await DropDownFiller.FillTeamsDropDownSource(Teams);
             await base.OnParametersSetAsync();
         }
 
@@ -53,14 +55,6 @@ namespace Client.Components
                 TeamId = e.TeamId.ToString(),
                 TechnologyNamesFlattened = string.Join(", ", e.TechnologyNames)
             }).ToList();
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            DropDownSources.TechnologiesFilter = await DropDownFiller.FillTechnologiesDropDownSource(Technologies);
-            DropDownSources.TeamsFilter = await DropDownFiller.FillTeamsDropDownSource(Teams);
-
-            await base.OnInitializedAsync();
         }
 
         private static string GetHeaderText(EmployeeTableVm employeeTableVm)

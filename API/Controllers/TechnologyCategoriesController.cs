@@ -44,14 +44,13 @@ namespace API.Controllers
         {
             try
             {
-                await _technologyCategoryService.AddAsync(createTechnologyCategory);
+                var id = await _technologyCategoryService.AddAsync(createTechnologyCategory);
+                return Ok(id);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest(e.Message);
             }
-
-            return Ok();
         }
 
         [HttpPut]

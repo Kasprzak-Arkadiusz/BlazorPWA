@@ -50,10 +50,13 @@ namespace Infrastructure.Repositories
         public async Task<int> AddAsync(CreateTeam t)
         {
             var team = _mapper.Map<Team>(t);
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Name == t.ProjectName);
 
-            team.Project = project;
-
+            if (!string.IsNullOrEmpty(t.ProjectName))
+            {
+                var project = await _context.Projects.FirstOrDefaultAsync(p => p.Name == t.ProjectName);
+                team.Project = project;
+            }
+            
             await _context.Teams.AddAsync(team);
             await _context.SaveChangesAsync();
 

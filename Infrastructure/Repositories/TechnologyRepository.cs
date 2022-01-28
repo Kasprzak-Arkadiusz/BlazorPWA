@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
                 Id = t.Id,
                 Name = t.Name,
                 CategoryName = t.Category.Name
-            }).ToListAsync();
+            }).OrderBy(t => t.Name).ToListAsync();
 
             return technologies;
         }
@@ -54,7 +54,7 @@ namespace Infrastructure.Repositories
         public async Task<int> AddAsync(CreateTechnology t)
         {
             var technology = _mapper.Map<Technology>(t);
-            var category = await _context.TechnologyCategories.FindAsync(t.TechnologyCategoryId);
+            var category = await _context.TechnologyCategories.FirstOrDefaultAsync(c => c.Name == t.TechnologyCategoryName);
             technology.Category = category;
 
             await _context.Technologies.AddAsync(technology);
@@ -66,7 +66,7 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(UpdateTechnology t)
         {
             var technologyToUpdate = await _context.Technologies.FindAsync(t.Id);
-            var category = await _context.TechnologyCategories.FindAsync(t.TechnologyCategoryId);
+            var category = await _context.TechnologyCategories.FirstOrDefaultAsync(c => c.Name == t.TechnologyCategoryName);
             technologyToUpdate.Category = category;
             technologyToUpdate.Name = t.Name;
 

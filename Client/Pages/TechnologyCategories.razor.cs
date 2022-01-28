@@ -8,7 +8,7 @@ namespace Client.Pages
 {
     public partial class TechnologyCategories
     {
-        public List<GetTechnologyCategoriesQuery> CategoryList { get; set; } = new();
+        private List<GetTechnologyCategoriesQuery> CategoryList { get; set; } = new();
 
         [Inject]
         public ITechnologyCategoriesHttpRepository TechnologyCategoryHttpRepository { get; set; }

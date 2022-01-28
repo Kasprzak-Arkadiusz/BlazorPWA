@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Application.Commands.Technology;
 
 namespace Client.HttpRepository.Technologies
 {
@@ -31,13 +32,13 @@ namespace Client.HttpRepository.Technologies
             return technologies;
         }
 
-        public async Task<int> CreateTechnologyAsync(CreateTeam technologyToAdd)
+        public async Task<int> CreateTechnologyAsync(CreateTechnology technologyToAdd)
         {
             var id = await CreateAsync(technologyToAdd);
             return id;
         }
 
-        public async Task<bool> UpdateTechnologyAsync(UpdateTeam technologyToUpdate)
+        public async Task<bool> UpdateTechnologyAsync(UpdateTechnology technologyToUpdate)
         {
             var success = await UpdateAsync(technologyToUpdate);
             return success;

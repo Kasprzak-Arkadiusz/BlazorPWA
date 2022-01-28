@@ -5,7 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace Infrastructure.Repositories
                     Id = p.Id,
                     Name = p.Name,
                     StartDate = p.StartDate,
-                    TeamId = p.Team.Id,
+                    TeamId = p.Team == null ? 0 : p.Team.Id,
                     Technologies = p.ProjectTechnologies.Select(t => t.Technology.Name).ToList()
                 }).ToListAsync();
 
@@ -42,87 +41,79 @@ namespace Infrastructure.Repositories
         {
             var project = await _context.Projects.Include(p => p.ProjectTechnologies)
                 .Select(p => new GetProjectDetailQuery
-            {
-                Id = p.Id,
-                Name = p.Name,
-                StartDate = p.StartDate,
-                TeamId = p.Team.Id,
-                Technologies = p.ProjectTechnologies.Where(pt => pt.ProjectId == id)
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StartDate = p.StartDate,
+                    TeamId = p.Team == null ? 0 : p.Team.Id,
+                    Technologies = p.ProjectTechnologies.Where(pt => pt.ProjectId == id)
                     .Select(t => t.Technology.Name).ToList()
-            }).FirstOrDefaultAsync(p => p.Id == id);
+                }).FirstOrDefaultAsync(p => p.Id == id);
 
             return project;
         }
 
-        public async Task<int> AddAsync(CreateProject p)
+        public async Task<int> AddAsync(CreateProject createProject)
         {
-            try {
-                var project = _mapper.Map<Project>(p);
-                var technologies = await _context.Technologies.Where(t => p.TechnologyNames.Contains(t.Name)).ToListAsync();
-                var team = await _context.Teams.FindAsync(p.TeamId);
+            var project = _mapper.Map<Project>(createProject);
+            var technologies = await _context.Technologies
+                .Where(t => createProject.TechnologyNames.Contains(t.Name))
+                .ToListAsync();
 
-                project.Team = team;
-
-                project.ProjectTechnologies = new List<ProjectTechnology>();
-                foreach (var technology in technologies)
-                {
-                    project.ProjectTechnologies.Add(new ProjectTechnology
-                    {
-                        Project = project,
-                        Technology = technology
-                    });
-                }
-
-                await _context.Projects.AddAsync(project);
-                await _context.SaveChangesAsync();
-
-                return project.Id;
-            }
-
-            catch (Exception e)
+            if (createProject.TeamId != 0)
             {
-                Console.WriteLine(e);
-                throw;
+                var team = await _context.Teams.FindAsync(createProject.TeamId);
+                project.Team = team;
             }
-            
+
+            project.ProjectTechnologies = new List<ProjectTechnology>();
+            foreach (var technology in technologies)
+            {
+                project.ProjectTechnologies.Add(new ProjectTechnology
+                {
+                    Project = project,
+                    Technology = technology
+                });
+            }
+
+            await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
+
+            return project.Id;
         }
 
         public async Task UpdateAsync(UpdateProject updateProject)
         {
-            try
-            {
-                var projectToUpdate = await _context.Projects
+            var projectToUpdate = await _context.Projects
                     .Include(p => p.ProjectTechnologies)
                     .FirstOrDefaultAsync(p => p.Id == updateProject.Id);
 
-                projectToUpdate.ProjectTechnologies.Clear();
+            projectToUpdate.ProjectTechnologies.Clear();
 
-                var technologies = await _context.Technologies
-                    .Where(t => updateProject.TechnologyNames.Contains(t.Name)).ToListAsync();
-                if (technologies.Count > 0)
-                {
-                    foreach (var technology in technologies)
-                    {
-                        projectToUpdate.ProjectTechnologies.Add(new ProjectTechnology
-                        {
-                            ProjectId = updateProject.Id,
-                            TechnologyId = technology.Id
-                        });
-                    }
-                }
-
-                var team = await _context.Teams.FindAsync(updateProject.TeamId);
-                projectToUpdate.Name = updateProject.Name;
-                projectToUpdate.StartDate = updateProject.StartDate;
-                projectToUpdate.Team = team;
-
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
+            var technologies = await _context.Technologies
+                .Where(t => updateProject.TechnologyNames.Contains(t.Name)).ToListAsync();
+            if (technologies.Count > 0)
             {
-                Console.WriteLine(e);
-                throw;
+                foreach (var technology in technologies)
+                {
+                    projectToUpdate.ProjectTechnologies.Add(new ProjectTechnology
+                    {
+                        ProjectId = updateProject.Id,
+                        TechnologyId = technology.Id
+                    });
+                }
             }
+
+            if (updateProject.TeamId != 0)
+            {
+                var team = await _context.Teams.FindAsync(updateProject.TeamId);
+                projectToUpdate.Team = team;
+            }
+
+            projectToUpdate.Name = updateProject.Name;
+            projectToUpdate.StartDate = updateProject.StartDate;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)

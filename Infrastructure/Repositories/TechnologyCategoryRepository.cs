@@ -31,7 +31,7 @@ namespace Infrastructure.Repositories
                 {
                     Id = t.Id,
                     Name = t.Name
-                }).ToListAsync();
+                }).OrderBy(c => c.Name).ToListAsync();
 
             return categories;
         }

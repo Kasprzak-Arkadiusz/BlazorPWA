@@ -3,9 +3,9 @@
 @using _Imports = Client._Imports
 @if (Categories.Count > 0)
 {
-    <SfGrid DataSource="@CategoryTableVms" AllowFiltering="true" AllowPaging="true"
+    <SfGrid DataSource="@CategoryTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> { "Add", "Edit", "Update", "Cancel" , "Delete" })">
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal">
             <HeaderTemplate>
                 <span>@GetHeaderText(context as TechnologyCategoryTableVm)</span>
             </HeaderTemplate>

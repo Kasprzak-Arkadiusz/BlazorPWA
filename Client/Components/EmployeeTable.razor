@@ -1,13 +1,14 @@
 ﻿@using Application.Queries.Employee
 @using Application.Queries.Team
 @using Application.Queries.Technology
+@using Client.Utilities
 @using Client.ViewModels
 @using _Imports = Client._Imports
 @using Action = Syncfusion.Blazor.Grids.Action
 
 @if (Employees.Count > 0)
 {
-    <SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true" 
+    <SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> {"Add", "Edit", "Delete"})">
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
             <HeaderTemplate>
@@ -85,14 +86,14 @@
         <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
         <GridEvents OnActionBegin="ActionBeginHandler" TValue="EmployeeTableVm"></GridEvents>
         <GridColumns>
-            <GridColumn IsPrimaryKey="true" Field="@nameof(EmployeeTableVm.Id)" Visible="true"></GridColumn>
+            <GridColumn IsPrimaryKey="true" Field="@nameof(EmployeeTableVm.Id)" Visible="false"></GridColumn>
             <GridColumn Field="@nameof(EmployeeTableVm.FirstName)" HeaderText="First name"></GridColumn>
             <GridColumn Field="@nameof(EmployeeTableVm.LastName)" HeaderText="Last name"></GridColumn>
             <GridColumn Field="@nameof(EmployeeTableVm.Age)" HeaderText="Age"></GridColumn>
             <GridColumn Field="@nameof(EmployeeTableVm.TechnologyNamesFlattened)" HeaderText="Technologies"
                         FilterSettings="@(new FilterSettings { Operator = Operator.Contains })" AllowEditing="false">
                 <FilterTemplate>
-                    <SfDropDownList Placeholder="All" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
+                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                         <DropDownListEvents TItem="DropDownListItem" TValue="string"
                                             ValueChange="@SelectedTechnologyChangeHandler">
@@ -102,7 +103,7 @@
             </GridColumn>
             <GridColumn Field="@nameof(EmployeeTableVm.TeamId)" HeaderText="Team id">
                 <FilterTemplate>
-                    <SfDropDownList Placeholder="All" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
+                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
                         <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                         <DropDownListEvents TItem="DropDownListItem" TValue="string"
                                             ValueChange="@SelectedTeamChangeHandler">

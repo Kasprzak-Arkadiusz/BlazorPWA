@@ -15,8 +15,7 @@ namespace Client.ViewModels
         [Required]
         [Display(Name = "Start date")]
         public DateTime StartDate { get; set; }
-
-        [Required]
+        
         [Display(Name = "Team id")]
         public string TeamId { get; set; }
         public string TechnologyNamesFlattened { get; set; }
