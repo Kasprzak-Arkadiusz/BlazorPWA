@@ -8,9 +8,7 @@ namespace Application.Common.Interfaces.Services
     public interface IEmployeeService
     {
         public Task<List<GetEmployeesQuery>> GetAllAsync();
-
-        public Task<GetEmployeesQuery> GetByIdAsync(int id);
-
+        
         public Task<int> AddAsync(CreateEmployee t);
 
         public Task UpdateAsync(UpdateEmployee t);

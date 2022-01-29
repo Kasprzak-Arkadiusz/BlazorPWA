@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Constants;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,8 +9,8 @@ namespace Infrastructure.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
-            builder.Property(e => e.FirstName).HasMaxLength(40).IsRequired();
-            builder.Property(e => e.LastName).HasMaxLength(40).IsRequired();
+            builder.Property(e => e.FirstName).HasMaxLength(Constants.EmployeeFirstNameMaxLength).IsRequired();
+            builder.Property(e => e.LastName).HasMaxLength(Constants.EmployeeLastNameMaxLength).IsRequired();
             builder.Property(e => e.Age).IsRequired();
 
             builder.HasOne(e => e.Team)

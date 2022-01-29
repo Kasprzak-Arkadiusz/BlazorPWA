@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Constants;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +9,7 @@ namespace Infrastructure.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Technology> builder)
         {
-            builder.Property(t => t.Name).HasMaxLength(40).IsRequired();
+            builder.Property(t => t.Name).HasMaxLength(Constants.TechnologyNameMaxLength).IsRequired();
             builder.HasIndex(t => t.Name).IsUnique();
 
             builder.HasOne(t => t.Category)

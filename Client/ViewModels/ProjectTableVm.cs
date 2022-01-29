@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Constants;
 
 namespace Client.ViewModels
 {
@@ -9,7 +10,7 @@ namespace Client.ViewModels
         public int Id { get; set; }
 
         [Required]
-        [StringLength(40, ErrorMessage = "Max length of {2} is {1} characters.")]
+        [StringLength(Constants.ProjectNameMaxLength, ErrorMessage = "Max length of {2} is {1} characters.")]
         public string Name { get; set; }
 
         [Required]

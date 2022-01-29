@@ -23,19 +23,7 @@ namespace API.Controllers
             var teams = await _teamService.GetAllAsync();
             return Ok(teams);
         }
-
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var team = await _teamService.GetByIdAsync(id);
-            if (team is null)
-                return NotFound();
-
-            return Ok(team);
-        }
-
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,7 +34,7 @@ namespace API.Controllers
                 var id = await _teamService.AddAsync(createTeam);
                 return Ok(id);
             }
-            catch (ArgumentNullException e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

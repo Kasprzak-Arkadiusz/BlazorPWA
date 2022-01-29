@@ -39,21 +39,6 @@ namespace Infrastructure.Repositories
             return employees;
         }
 
-        public async Task<GetEmployeesQuery> GetByIdAsync(int id)
-        {
-            var employee = await _context.Employees.Select(e => new GetEmployeesQuery
-            {
-                Id = e.Id,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Age = e.Age,
-                TeamId = e.Team.Id,
-                TechnologyNames = e.EmployeeTechnologies.Select(et => et.Technology.Name).ToList()
-            }).FirstOrDefaultAsync(e => e.Id == id);
-
-            return employee;
-        }
-
         public async Task<int> AddAsync(CreateEmployee e)
         {
             var employee = _mapper.Map<Employee>(e);

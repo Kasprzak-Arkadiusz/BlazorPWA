@@ -35,22 +35,6 @@ namespace Infrastructure.Repositories
             return technologies;
         }
 
-        public async Task<GetTechnologyDetailsQuery> GetByIdAsync(int id)
-        {
-            var technology = await _context.Technologies.Select(t => new GetTechnologyDetailsQuery
-            {
-                Id = t.Id,
-                Name = t.Name,
-                CategoryName = t.Category.Name,
-                Employees = t.EmployeeTechnologies.Where(et => et.EmployeeId == id)
-                    .Select(e => e.Employee.FirstName + " " + e.Employee.LastName).ToList(),
-                ProjectNames = _context.ProjectTechnologies.Where(p => p.TechnologyId == t.Id)
-                    .Select(p => p.Project.Name).ToList()
-            }).FirstOrDefaultAsync(t => t.Id == id);
-
-            return technology;
-        }
-
         public async Task<int> AddAsync(CreateTechnology t)
         {
             var technology = _mapper.Map<Technology>(t);

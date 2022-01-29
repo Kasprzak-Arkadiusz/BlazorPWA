@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Commands.TechnologyCategory;
+﻿using Application.Commands.TechnologyCategory;
 using Application.Common.Interfaces.Repositories;
-using Application.Persistence;
 using Application.Queries.TechnologyCategory;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -34,18 +33,6 @@ namespace Infrastructure.Repositories
                 }).OrderBy(c => c.Name).ToListAsync();
 
             return categories;
-        }
-
-        public async Task<GetTechnologyCategoryDetailQuery> GetByIdAsync(int id)
-        {
-            var category = await _context.TechnologyCategories.Select(c => new GetTechnologyCategoryDetailQuery
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Technologies = c.Technologies.Select(t => t.Name).ToList()
-            }).FirstOrDefaultAsync(c => c.Id == id);
-
-            return category;
         }
 
         public async Task<int> AddAsync(CreateTechnologyCategory t)

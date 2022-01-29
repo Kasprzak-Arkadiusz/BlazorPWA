@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.Team;
+﻿using Application.Commands.Team;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.Queries.Team;
+using Application.Validators;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -24,16 +24,9 @@ namespace Infrastructure.Services
             return teams;
         }
 
-        public async Task<GetTeamDetailsQuery> GetByIdAsync(int id)
-        {
-            var team = await _teamRepository.GetByIdAsync(id);
-            return team;
-        }
-
         public async Task<int> AddAsync(CreateTeam t)
         {
-            if (t is null)
-                throw new ArgumentNullException(nameof(t), "Created team can not be null");
+            TeamValidator.Validate(t);
 
             var id = await _teamRepository.AddAsync(t);
 
@@ -42,16 +35,14 @@ namespace Infrastructure.Services
 
         public async Task UpdateAsync(UpdateTeam t)
         {
-            if (t is null)
-                throw new ArgumentNullException(nameof(t), "Updated team can not be null");
+            TeamValidator.Validate(t);
 
             await _teamRepository.UpdateAsync(t);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if (id < 1)
-                throw new ArgumentOutOfRangeException(nameof(id), "Id cannot be lesser than 1");
+            IdValidator.Validate(id);
 
             var result = await _teamRepository.DeleteAsync(id);
             return result;

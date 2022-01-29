@@ -37,22 +37,6 @@ namespace Infrastructure.Repositories
             return projects;
         }
 
-        public async Task<GetProjectDetailQuery> GetByIdAsync(int id)
-        {
-            var project = await _context.Projects.Include(p => p.ProjectTechnologies)
-                .Select(p => new GetProjectDetailQuery
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    StartDate = p.StartDate,
-                    TeamId = p.Team == null ? 0 : p.Team.Id,
-                    Technologies = p.ProjectTechnologies.Where(pt => pt.ProjectId == id)
-                    .Select(t => t.Technology.Name).ToList()
-                }).FirstOrDefaultAsync(p => p.Id == id);
-
-            return project;
-        }
-
         public async Task<int> AddAsync(CreateProject createProject)
         {
             var project = _mapper.Map<Project>(createProject);

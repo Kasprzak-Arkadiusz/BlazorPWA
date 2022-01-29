@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Commands.Employee;
+﻿using Application.Commands.Employee;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.Queries.Employee;
+using Application.Validators;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -23,16 +23,9 @@ namespace Infrastructure.Services
             return employees;
         }
 
-        public async Task<GetEmployeesQuery> GetByIdAsync(int id)
-        {
-            var employee = await _employeeRepository.GetByIdAsync(id);
-            return employee;
-        }
-
         public async Task<int> AddAsync(CreateEmployee e)
         {
-            if (e is null)
-                throw new ArgumentNullException(nameof(e), "Created employee can not be null");
+            EmployeeValidator.Validate(e);
 
             var id = await _employeeRepository.AddAsync(e);
             return id;
@@ -40,16 +33,14 @@ namespace Infrastructure.Services
 
         public async Task UpdateAsync(UpdateEmployee e)
         {
-            if (e is null)
-                throw new ArgumentNullException(nameof(e), "Updated employee can not be null");
+            EmployeeValidator.Validate(e);
 
             await _employeeRepository.UpdateAsync(e);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if (id < 1)
-                throw new ArgumentOutOfRangeException(nameof(id), "Id cannot be lesser than 1");
+            IdValidator.Validate(id);
 
             var result = await _employeeRepository.DeleteAsync(id);
             return result;

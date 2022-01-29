@@ -9,8 +9,6 @@ namespace Application.Common.Interfaces.Repositories
     {
         public Task<List<GetTechnologiesQuery>> GetAllAsync();
 
-        public Task<GetTechnologyDetailsQuery> GetByIdAsync(int id);
-
         public Task<int> AddAsync(CreateTechnology t);
 
         public Task UpdateAsync(UpdateTechnology t);

@@ -9,8 +9,6 @@ namespace Application.Common.Interfaces.Repositories
     {
         public Task<List<GetTeamsQuery>> GetAllAsync();
 
-        public Task<GetTeamDetailsQuery> GetByIdAsync(int id);
-
         public Task<int> AddAsync(CreateTeam t);
 
         public Task UpdateAsync(UpdateTeam t);

@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Commands.Team;
+﻿using Application.Commands.Team;
 using Application.Common.Interfaces.Repositories;
-using Application.Persistence;
 using Application.Queries.Team;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -35,18 +34,6 @@ namespace Infrastructure.Repositories
             return teams;
         }
 
-        public async Task<GetTeamDetailsQuery> GetByIdAsync(int id)
-        {
-            var team = await _context.Teams.Select(t => new GetTeamDetailsQuery()
-            {
-                Id = t.Id,
-                ProjectName = t.Project.Name,
-                Employees = t.Employees.Select(e => e.FirstName + " " + e.LastName).ToList()
-            }).FirstOrDefaultAsync(t => t.Id == id);
-
-            return team;
-        }
-
         public async Task<int> AddAsync(CreateTeam t)
         {
             var team = _mapper.Map<Team>(t);
@@ -56,7 +43,7 @@ namespace Infrastructure.Repositories
                 var project = await _context.Projects.FirstOrDefaultAsync(p => p.Name == t.ProjectName);
                 team.Project = project;
             }
-            
+
             await _context.Teams.AddAsync(team);
             await _context.SaveChangesAsync();
 

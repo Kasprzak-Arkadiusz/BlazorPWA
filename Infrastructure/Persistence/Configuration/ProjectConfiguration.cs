@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Constants;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +9,7 @@ namespace Infrastructure.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
+            builder.Property(p => p.Name).HasMaxLength(Constants.ProjectNameMaxLength).IsRequired();
             builder.HasIndex(p => p.Name).IsUnique();
             builder.Property(p => p.StartDate).IsRequired();
 

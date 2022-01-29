@@ -9,8 +9,6 @@ namespace Application.Common.Interfaces.Repositories
     {
         public Task<List<GetTechnologyCategoriesQuery>> GetAllAsync();
 
-        public Task<GetTechnologyCategoryDetailQuery> GetByIdAsync(int id);
-
         public Task<int> AddAsync(CreateTechnologyCategory t);
 
         public Task UpdateAsync(UpdateTechnologyCategory t);
