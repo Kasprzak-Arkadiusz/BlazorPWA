@@ -1,10 +1,10 @@
-﻿using Application.Queries.Team;
+﻿using Application.Commands.Team;
+using Application.Queries;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Application.Commands.Team;
 
 namespace Client.HttpRepository.Teams
 {

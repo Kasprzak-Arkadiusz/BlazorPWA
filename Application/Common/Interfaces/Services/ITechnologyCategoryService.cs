@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Application.Commands.TechnologyCategory;
+using Application.Queries;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Commands.TechnologyCategory;
-using Application.Queries.TechnologyCategory;
 
 namespace Application.Common.Interfaces.Services
 {
     public interface ITechnologyCategoryService
     {
         public Task<List<GetTechnologyCategoriesQuery>> GetAllAsync();
-        
+
         public Task<int> AddAsync(CreateTechnologyCategory t);
 
         public Task UpdateAsync(UpdateTechnologyCategory t);

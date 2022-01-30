@@ -1,6 +1,6 @@
 ﻿using Application.Commands.Employee;
 using Application.Common.Interfaces.Repositories;
-using Application.Queries.Employee;
+using Application.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;
@@ -27,14 +27,14 @@ namespace Infrastructure.Repositories
         {
             var employees = await _context.Employees.Include(e => e.EmployeeTechnologies)
                 .Select(e => new GetEmployeesQuery
-            {
-                Id = e.Id,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Age = e.Age,
-                TeamId = e.Team.Id,
-                TechnologyNames = e.EmployeeTechnologies.Select(et => et.Technology.Name).ToList()
-            }).ToListAsync();
+                {
+                    Id = e.Id,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    Age = e.Age,
+                    TeamId = e.Team.Id,
+                    TechnologyNames = e.EmployeeTechnologies.Select(et => et.Technology.Name).ToList()
+                }).ToListAsync();
 
             return employees;
         }

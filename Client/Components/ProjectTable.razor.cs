@@ -1,8 +1,6 @@
 ﻿using Application.Commands.Project;
 using Application.Common.Utils;
-using Application.Queries.Project;
-using Application.Queries.Team;
-using Application.Queries.Technology;
+using Application.Queries;
 using Client.HttpRepository.Projects;
 using Client.Utilities;
 using Client.Utilities.DropDownSources;

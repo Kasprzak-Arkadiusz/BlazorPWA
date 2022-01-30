@@ -1,6 +1,6 @@
 ﻿using Application.Common.Utils;
 
-namespace Application.Queries.Technology
+namespace Application.Queries
 {
     public class GetTechnologiesQuery : IDropDownEntity
     {

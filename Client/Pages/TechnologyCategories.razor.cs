@@ -1,4 +1,4 @@
-﻿using Application.Queries.TechnologyCategory;
+﻿using Application.Queries;
 using Client.HttpRepository.Categories;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;

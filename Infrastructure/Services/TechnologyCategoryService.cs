@@ -1,7 +1,7 @@
 ﻿using Application.Commands.TechnologyCategory;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
-using Application.Queries.TechnologyCategory;
+using Application.Queries;
 using Application.Validators;
 using System.Collections.Generic;
 using System.Threading.Tasks;

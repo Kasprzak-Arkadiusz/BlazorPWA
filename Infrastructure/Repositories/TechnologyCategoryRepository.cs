@@ -1,6 +1,6 @@
 ﻿using Application.Commands.TechnologyCategory;
 using Application.Common.Interfaces.Repositories;
-using Application.Queries.TechnologyCategory;
+using Application.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;

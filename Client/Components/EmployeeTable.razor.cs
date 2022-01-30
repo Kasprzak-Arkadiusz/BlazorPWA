@@ -1,7 +1,9 @@
 ﻿using Application.Commands.Employee;
 using Application.Common.Utils;
-using Application.Queries.Employee;
+using Application.Queries;
 using Client.HttpRepository.Employees;
+using Client.Utilities;
+using Client.Utilities.DropDownSources;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.DropDowns;
@@ -9,10 +11,6 @@ using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Utilities;
-using Application.Queries.Team;
-using Application.Queries.Technology;
-using Client.Utilities.DropDownSources;
 
 namespace Client.Components
 {
@@ -26,6 +24,9 @@ namespace Client.Components
 
         [Parameter]
         public List<GetTeamsQuery> Teams { get; set; }
+
+        [Parameter]
+        public bool IsOnline { get; set; }
 
         [Inject]
         public IEmployeesHttpRepository EmployeesHttpRepository { get; set; }

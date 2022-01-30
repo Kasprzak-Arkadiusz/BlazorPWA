@@ -1,8 +1,7 @@
-﻿using Application.Commands.Team;
-using Application.Queries.Technology;
+﻿using Application.Commands.Technology;
+using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Commands.Technology;
 
 namespace Client.HttpRepository.Technologies
 {

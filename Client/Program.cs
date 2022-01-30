@@ -1,15 +1,18 @@
+using Client.Caching;
 using Client.HttpRepository.Categories;
 using Client.HttpRepository.Employees;
 using Client.HttpRepository.Projects;
 using Client.HttpRepository.Teams;
 using Client.HttpRepository.Technologies;
+using DnetIndexedDb;
+using DnetIndexedDb.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Blazor;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Client.Utilities;
+using DnetIndexedDb.Fluent;
 
 namespace Client
 {
@@ -32,7 +35,9 @@ namespace Client
             builder.Services.AddTransient<ITechnologyCategoriesHttpRepository, TechnologyCategoriesHttpRepository>();
             builder.Services.AddTransient<ITeamsHttpRepository, TeamsHttpRepository>();
             builder.Services.AddTransient<IProjectsHttpRepository, ProjectsHttpRepository>();
-            
+
+            builder.Services.ConfigureIndexedDbDatabase();
+
             await builder.Build().RunAsync();
         }
     }

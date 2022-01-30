@@ -1,7 +1,4 @@
-﻿@using Application.Queries.Technology
-@using Client.Utilities
-@using Client.ViewModels
-@if (Technologies.Count > 0)
+﻿@if (Technologies.Count > 0)
 {
     <SfGrid @ref="TechnologiesGrid" DataSource="@TechnologyTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> { "Add", "Edit", "Delete" })">

@@ -1,11 +1,10 @@
-﻿using Application.Commands.Team;
-using Application.Queries.Technology;
+﻿using Application.Commands.Technology;
+using Application.Queries;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Application.Commands.Technology;
 
 namespace Client.HttpRepository.Technologies
 {

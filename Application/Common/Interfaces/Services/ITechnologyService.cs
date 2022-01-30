@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Application.Commands.Technology;
+using Application.Queries;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Commands.Technology;
-using Application.Queries.Technology;
 
 namespace Application.Common.Interfaces.Services
 {

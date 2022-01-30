@@ -1,6 +1,4 @@
-﻿using Application.Queries.Project;
-using Application.Queries.Team;
-using Application.Queries.Technology;
+﻿using Application.Queries;
 using Client.HttpRepository.Projects;
 using Client.HttpRepository.Teams;
 using Client.HttpRepository.Technologies;

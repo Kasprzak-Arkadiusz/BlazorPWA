@@ -1,6 +1,6 @@
 ﻿using Application.Commands.Project;
 using Application.Common.Interfaces.Repositories;
-using Application.Queries.Project;
+using Application.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;

@@ -1,17 +1,16 @@
-﻿using Application.Queries.Technology;
-using Application.Queries.TechnologyCategory;
+﻿using Application.Commands.Technology;
+using Application.Common.Utils;
+using Application.Queries;
 using Client.HttpRepository.Technologies;
+using Client.Utilities;
+using Client.Utilities.DropDownSources;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Commands.Technology;
-using Application.Common.Utils;
-using Client.Utilities;
-using Client.Utilities.DropDownSources;
-using Syncfusion.Blazor.DropDowns;
 
 namespace Client.Components
 {

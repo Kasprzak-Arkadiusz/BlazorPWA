@@ -1,7 +1,5 @@
 ﻿using Application.Common.Utils;
-using Application.Queries.Team;
-using Application.Queries.Technology;
-using Application.Queries.TechnologyCategory;
+using Application.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

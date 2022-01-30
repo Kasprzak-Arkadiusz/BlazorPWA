@@ -1,12 +1,9 @@
-﻿using Application.Queries.Technology;
-using Application.Queries.TechnologyCategory;
-using Client.HttpRepository.Projects;
-using Client.HttpRepository.Teams;
+﻿using Application.Queries;
+using Client.HttpRepository.Categories;
 using Client.HttpRepository.Technologies;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Client.HttpRepository.Categories;
 
 namespace Client.Pages
 {

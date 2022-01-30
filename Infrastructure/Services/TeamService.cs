@@ -1,7 +1,7 @@
 ﻿using Application.Commands.Team;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
-using Application.Queries.Team;
+using Application.Queries;
 using Application.Validators;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -1,10 +1,9 @@
-﻿using Application.Queries.Team;
+﻿using Application.Queries;
+using Client.HttpRepository.Projects;
 using Client.HttpRepository.Teams;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Queries.Project;
-using Client.HttpRepository.Projects;
 
 namespace Client.Pages
 {

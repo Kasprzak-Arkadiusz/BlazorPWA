@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Application.Queries.Employee
+namespace Application.Queries
 {
     public class GetEmployeesQuery
     {

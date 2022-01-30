@@ -1,6 +1,6 @@
 ﻿using Application.Common.Utils;
 
-namespace Application.Queries.Team
+namespace Application.Queries
 {
     public class GetTeamsQuery : IDropDownEntity
     {

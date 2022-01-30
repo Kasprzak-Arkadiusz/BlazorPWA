@@ -1,5 +1,4 @@
-﻿using Application.Queries.TechnologyCategory;
-using Client.HttpRepository.Categories;
+﻿using Client.HttpRepository.Categories;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Commands.TechnologyCategory;
+using Application.Queries;
 
 namespace Client.Components
 {

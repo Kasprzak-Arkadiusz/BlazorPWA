@@ -1,5 +1,5 @@
 ﻿using Application.Commands.Employee;
-using Application.Queries.Employee;
+using Application.Queries;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

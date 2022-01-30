@@ -1,5 +1,5 @@
 ﻿using Application.Commands.Project;
-using Application.Queries.Project;
+using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

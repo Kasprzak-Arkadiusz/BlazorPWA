@@ -1,9 +1,8 @@
 ﻿using Application.Commands.Project;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
-using Application.Queries.Project;
+using Application.Queries;
 using Application.Validators;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

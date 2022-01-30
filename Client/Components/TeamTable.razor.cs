@@ -1,7 +1,6 @@
 ﻿using Application.Commands.Team;
 using Application.Common.Utils;
-using Application.Queries.Project;
-using Application.Queries.Team;
+using Application.Queries;
 using Client.HttpRepository.Teams;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Components;

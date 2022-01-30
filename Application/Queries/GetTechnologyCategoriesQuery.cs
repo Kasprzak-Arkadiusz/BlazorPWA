@@ -1,6 +1,6 @@
 ﻿using Application.Common.Utils;
 
-namespace Application.Queries.TechnologyCategory
+namespace Application.Queries
 {
     public class GetTechnologyCategoriesQuery : IDropDownEntity
     {

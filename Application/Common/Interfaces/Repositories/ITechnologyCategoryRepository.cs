@@ -1,5 +1,5 @@
 ﻿using Application.Commands.TechnologyCategory;
-using Application.Queries.TechnologyCategory;
+using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

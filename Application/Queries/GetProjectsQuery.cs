@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Application.Queries.Project
+namespace Application.Queries
 {
     public class GetProjectsQuery
     {

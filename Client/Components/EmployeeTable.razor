@@ -1,16 +1,11 @@
-﻿@using Application.Queries.Employee
-@using Application.Queries.Team
-@using Application.Queries.Technology
-@using Client.Utilities
-@using Client.ViewModels
-@using _Imports = Client._Imports
+﻿@using _Imports = Client._Imports
 @using Action = Syncfusion.Blazor.Grids.Action
 
 @if (Employees.Count > 0)
 {
     <SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> {"Add", "Edit", "Delete"})">
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
             <HeaderTemplate>
                 <span>@GetHeaderText(context as EmployeeTableVm)</span>
             </HeaderTemplate>
