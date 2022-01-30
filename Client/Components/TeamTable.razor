@@ -3,7 +3,7 @@
 {
     <SfGrid DataSource="@TeamTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> { "Add", "Delete" })">
-        <GridEditSettings AllowAdding="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <GridEditSettings AllowAdding="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
             <HeaderTemplate>
                 <span>Add new team</span>
             </HeaderTemplate>

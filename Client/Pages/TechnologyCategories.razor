@@ -1,8 +1,14 @@
 ﻿@page "/technologyCategories"
-@using Client.Components
 
-<div class="row">
-    <div class="col">
-        <CategoryTable Categories="CategoryList"/>
+@if (_successfulFetch)
+{
+    <div class="row">
+        <div class="col">
+            <CategoryTable Categories="CategoryList" IsOnline="_isOnline"/>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <OfflineReport/>
+}

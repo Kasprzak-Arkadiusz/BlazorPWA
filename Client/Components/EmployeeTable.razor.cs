@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Client.Components
 {
-    public partial class EmployeeTable
+    public partial class EmployeeTable : ComponentBase
     {
         [Parameter]
         public List<GetEmployeesQuery> Employees { get; set; }

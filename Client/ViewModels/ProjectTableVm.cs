@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Application.Common.Constants;
+using System;
 using System.ComponentModel.DataAnnotations;
-using Application.Common.Constants;
 
 namespace Client.ViewModels
 {
@@ -16,13 +16,14 @@ namespace Client.ViewModels
         [Required]
         [Display(Name = "Start date")]
         public DateTime StartDate { get; set; }
-        
+
         [Display(Name = "Team id")]
         public string TeamId { get; set; }
+
         public string TechnologyNamesFlattened { get; set; }
         public string TechnologyToRemove { get; set; }
         public string TechnologyToAdd { get; set; }
-        
+
         public string Technology { get; set; }
     }
 }

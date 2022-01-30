@@ -11,13 +11,16 @@ using System.Threading.Tasks;
 
 namespace Client.Components
 {
-    public partial class TeamTable
+    public partial class TeamTable : ComponentBase
     {
         [Parameter]
         public List<GetTeamsQuery> Teams { get; set; }
 
         [Parameter]
         public List<GetProjectsQuery> Projects { get; set; }
+
+        [Parameter]
+        public bool IsOnline { get; set; }
 
         [Inject]
         public ITeamsHttpRepository TeamsHttpRepository { get; set; }

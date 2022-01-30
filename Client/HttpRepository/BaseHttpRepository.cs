@@ -30,7 +30,6 @@ namespace Client.HttpRepository
                 var error = await response.Content.ReadAsStringAsync();
                 return 0;
             }
-                
 
             var id = await response.Content.ReadFromJsonAsync<int>();
             return id;

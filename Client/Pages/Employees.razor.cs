@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Client.Pages
 {
-    public partial class Employees : ComponentBase
+    public partial class Employees
     {
         private List<GetEmployeesQuery> EmployeeList { get; set; } = new();
         private List<GetTechnologiesQuery> TechnologyList { get; set; } = new();
@@ -22,7 +22,6 @@ namespace Client.Pages
         private bool _isOnline;
 
         [Inject] public IEmployeesHttpRepository EmployeesRepository { get; set; }
-
         [Inject] public ITechnologiesHttpRepository TechnologiesHttpRepository { get; set; }
         [Inject] public ITeamsHttpRepository TeamsHttpRepository { get; set; }
         [Inject] public GridColumnDataIndexedDb GridColumnDataIndexedDb { get; set; }
@@ -35,28 +34,28 @@ namespace Client.Pages
             if (_isOnline)
             {
                 await FillListsAsync();
-                await CacheData();
+                await CacheDataAsync();
                 _successfulFetch = true;
                 return;
             }
 
-            var success = await FillListsFromCache();
+            var success = await FillListsFromCacheAsync();
             if (!success)
                 _successfulFetch = false;
 
             await base.OnInitializedAsync();
         }
 
-        private async Task CacheData()
+        private async Task CacheDataAsync()
         {
             var openResult = await GridColumnDataIndexedDb.OpenIndexedDb();
 
-            var employeeResult = await AddItemsToIndexedDb(Constants.EmployeesObjectStoreName, EmployeeList);
-            var technologyResult = await AddItemsToIndexedDb(Constants.TechnologiesObjectStoreName, TechnologyList);
-            var teamResult = await AddItemsToIndexedDb(Constants.TeamsObjectStoreName, TeamList);
+            var employeeResult = await AddItemsToIndexedDbAsync(Constants.EmployeesObjectStoreName, EmployeeList);
+            var technologyResult = await AddItemsToIndexedDbAsync(Constants.TechnologiesObjectStoreName, TechnologyList);
+            var teamResult = await AddItemsToIndexedDbAsync(Constants.TeamsObjectStoreName, TeamList);
         }
 
-        private async Task<string> AddItemsToIndexedDb<T>(string objectStoreName, List<T> items)
+        private async Task<string> AddItemsToIndexedDbAsync<T>(string objectStoreName, List<T> items)
         {
             var deleteResult = await GridColumnDataIndexedDb.DeleteAll(objectStoreName);
             if (deleteResult is not ("DB_DELETED" or "DB_DELETEOBJECT_SUCCESS"))
@@ -66,7 +65,7 @@ namespace Client.Pages
             return addResult;
         }
 
-        private async Task<bool> FillListsFromCache()
+        private async Task<bool> FillListsFromCacheAsync()
         {
             await GridColumnDataIndexedDb.OpenIndexedDb();
 

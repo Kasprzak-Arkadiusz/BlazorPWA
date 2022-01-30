@@ -14,13 +14,16 @@ using System.Threading.Tasks;
 
 namespace Client.Components
 {
-    public partial class TechnologyTable
+    public partial class TechnologyTable : ComponentBase
     {
         [Parameter]
         public List<GetTechnologiesQuery> Technologies { get; set; }
 
         [Parameter]
         public List<GetTechnologyCategoriesQuery> Categories { get; set; }
+
+        [Parameter]
+        public bool IsOnline { get; set; }
 
         [Inject]
         public ITechnologiesHttpRepository TechnologiesHttpRepository { get; set; }

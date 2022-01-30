@@ -1,19 +1,22 @@
-﻿using Client.HttpRepository.Categories;
+﻿using Application.Commands.TechnologyCategory;
+using Application.Queries;
+using Client.HttpRepository.Categories;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Commands.TechnologyCategory;
-using Application.Queries;
 
 namespace Client.Components
 {
-    public partial class CategoryTable
+    public partial class CategoryTable : ComponentBase
     {
-        [Parameter] 
+        [Parameter]
         public List<GetTechnologyCategoriesQuery> Categories { get; set; } = new();
+
+        [Parameter]
+        public bool IsOnline { get; set; }
 
         [Inject]
         public ITechnologyCategoriesHttpRepository TechnologyCategoriesHttpRepository { get; set; }

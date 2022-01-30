@@ -15,7 +15,7 @@ using Action = Syncfusion.Blazor.Grids.Action;
 
 namespace Client.Components
 {
-    public partial class ProjectTable
+    public partial class ProjectTable : ComponentBase
     {
         [Parameter]
         public List<GetProjectsQuery> Projects { get; set; }
@@ -25,6 +25,9 @@ namespace Client.Components
 
         [Parameter]
         public List<GetTeamsQuery> Teams { get; set; }
+
+        [Parameter]
+        public bool IsOnline { get; set; }
 
         [Inject]
         public IProjectsHttpRepository ProjectsHttpRepository { get; set; }

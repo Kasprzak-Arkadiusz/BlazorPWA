@@ -2,7 +2,7 @@
 {
     <SfGrid @ref="TechnologiesGrid" DataSource="@TechnologyTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
             Toolbar="@(new List<string> { "Add", "Edit", "Delete" })">
-         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+         <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
             <HeaderTemplate>
                 <span>@GetHeaderText(context as TechnologyTableVm)</span>
             </HeaderTemplate>

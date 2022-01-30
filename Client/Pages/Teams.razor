@@ -1,8 +1,14 @@
 ﻿@page "/teams"
-@using Client.Components
 
-<div class="row">
-    <div class="col">
-        <TeamTable Teams="TeamList" Projects="ProjectList"/>
+@if (_successfulFetch)
+{
+    <div class="row">
+        <div class="col">
+            <TeamTable Teams="TeamList" Projects="ProjectList" IsOnline="_isOnline"/>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <OfflineReport/>
+}

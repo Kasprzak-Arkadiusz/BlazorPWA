@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Application.Common.Utils;
+﻿using Application.Common.Utils;
+using System.Collections.Generic;
 
 namespace Client.Utilities.DropDownSources
 {

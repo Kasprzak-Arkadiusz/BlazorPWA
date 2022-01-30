@@ -15,7 +15,7 @@ namespace Client.Caching
                     .WithName("OfflineCache")
                     .WithVersion(1)
                     .WithModelId(0);
-                
+
                 model.AddStore("EmployeesQuery")
                     .WithAutoIncrementingKey("Id")
                     .AddUniqueIndex("Id")
