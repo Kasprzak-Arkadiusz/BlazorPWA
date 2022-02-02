@@ -31,7 +31,7 @@ namespace Infrastructure.Repositories
                     Name = p.Name,
                     StartDate = p.StartDate,
                     TeamId = p.Team == null ? 0 : p.Team.Id,
-                    Technologies = p.ProjectTechnologies.Select(t => t.Technology.Name).ToList()
+                    Technologies = p.ProjectTechnologies.Select(t => t.Technology.Name).OrderBy(t => t).ToList()
                 }).ToListAsync();
 
             return projects;
@@ -86,12 +86,6 @@ namespace Infrastructure.Repositories
                         TechnologyId = technology.Id
                     });
                 }
-            }
-
-            if (updateProject.TeamId != 0)
-            {
-                var team = await _context.Teams.FindAsync(updateProject.TeamId);
-                projectToUpdate.Team = team;
             }
 
             projectToUpdate.Name = updateProject.Name;

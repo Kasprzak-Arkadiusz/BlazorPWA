@@ -11,6 +11,7 @@ using Syncfusion.Blazor.Grids;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Responses;
 
 namespace Client.Components
 {
@@ -35,6 +36,7 @@ namespace Client.Components
         private List<EmployeeTableVm> EmployeeTableVms { get; set; }
         private SfGrid<EmployeeTableVm> EmployeesGrid { get; set; }
 
+        private string _errorMessage;
         private bool _isEdit;
 
         protected override async Task OnParametersSetAsync()
@@ -94,7 +96,7 @@ namespace Client.Components
                     return;
 
                 case Action.Save when args.Action == "Add":
-                    await AddEmployee(args.Data);
+                    await AddEmployee(args);
                     return;
 
                 case Action.BeginEdit:
@@ -156,8 +158,10 @@ namespace Client.Components
             }).ToList();
         }
 
-        private async Task AddEmployee(EmployeeTableVm employeeVm)
+        private async Task AddEmployee(ActionEventArgs<EmployeeTableVm> args)
         {
+            var employeeVm = args.Data;
+
             var employeeToAdd = new CreateEmployee
             {
                 Age = employeeVm.Age,
@@ -167,11 +171,20 @@ namespace Client.Components
                 TechnologyNames = new List<string> { employeeVm.Technology }
             };
 
-            var id = await EmployeesHttpRepository.CreateEmployeeAsync(employeeToAdd);
+            var response = await EmployeesHttpRepository.CreateEmployeeAsync(employeeToAdd);
 
-            employeeVm.TechnologyNamesFlattened = string.IsNullOrEmpty(employeeVm.Technology) ? string.Empty : employeeVm.Technology;
-            employeeVm.Id = id;
+            if (string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                employeeVm.TechnologyNamesFlattened = string.IsNullOrEmpty(employeeVm.Technology) ? string.Empty : employeeVm.Technology;
+                employeeVm.Id = response.Id;
+                return;
+            }
+
+            args.Cancel = true;
+            await EmployeesGrid.CloseEdit();
+            _errorMessage = response.ErrorMessage;
         }
+
 
         private async Task EditEmployee(EmployeeTableVm employeeVm)
         {

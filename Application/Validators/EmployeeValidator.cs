@@ -25,7 +25,7 @@ namespace Application.Validators
                 throw new ParameterExceedsMaxLengthException(nameof(employee.LastName));
 
             if (employee.Age is < Constants.EmployeeMinAge or > Constants.EmployeeMaxAge)
-                throw new ArgumentOutOfRangeSpecificException(Constants.EmployeeMinAge, Constants.EmployeeMaxAge, nameof(employee.Age));
+                throw new ArgumentOutOfSpecificRangeException(Constants.EmployeeMinAge, Constants.EmployeeMaxAge, nameof(employee.Age));
         }
 
         public static void Validate(UpdateEmployee employee)

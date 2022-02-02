@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
 
 namespace Infrastructure.Repositories
 {
@@ -41,10 +42,23 @@ namespace Infrastructure.Repositories
             var category = await _context.TechnologyCategories.FirstOrDefaultAsync(c => c.Name == t.TechnologyCategoryName);
             technology.Category = category;
 
+            if (!await IsUnique(technology))
+            {
+                throw new DuplicateOnUniqueEntityException();
+            }
+
             await _context.Technologies.AddAsync(technology);
             await _context.SaveChangesAsync();
 
             return technology.Id;
+        }
+
+        private async Task<bool> IsUnique(Technology technology)
+        {
+            var duplicate = await _context.Technologies
+                .FirstOrDefaultAsync(t => t.Name == technology.Name);
+
+            return duplicate is null;
         }
 
         public async Task UpdateAsync(UpdateTechnology t)

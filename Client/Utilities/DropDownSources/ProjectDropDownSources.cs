@@ -8,10 +8,10 @@ namespace Client.Utilities.DropDownSources
         public List<DropDownListItem> TechnologiesFilter { get; set; }
         public List<DropDownListItem> TeamsFilter { get; set; }
 
-        public List<DropDownListItem> EditTeam { get; set; }
         public List<DropDownListItem> EditTechnologiesToRemove { get; set; }
         public List<DropDownListItem> EditTechnologiesToAdd { get; set; }
 
         public List<DropDownListItem> CreateTechnologiesToAdd { get; set; }
+        public List<DropDownListItem> CreateTeamToAdd { get; set; }
     }
 }

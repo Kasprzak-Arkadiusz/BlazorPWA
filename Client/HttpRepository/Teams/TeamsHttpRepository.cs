@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Team;
+using Application.Common.Responses;
 using Application.Queries;
 using System;
 using System.Collections.Generic;
@@ -31,10 +32,10 @@ namespace Client.HttpRepository.Teams
             return teams;
         }
 
-        public async Task<int> CreateTeamAsync(CreateTeam teamToAdd)
+        public async Task<CreateResponse> CreateTeamAsync(CreateTeam teamToAdd)
         {
-            var id = await CreateAsync(teamToAdd);
-            return id;
+            var response = await CreateAsync(teamToAdd);
+            return response;
         }
 
         public async Task<bool> UpdateTeamAsync(UpdateTeam teamToUpdate)

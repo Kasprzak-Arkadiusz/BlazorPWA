@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Employee;
+using Application.Common.Responses;
 using Application.Queries;
 using System;
 using System.Collections.Generic;
@@ -30,10 +31,10 @@ namespace Client.HttpRepository.Employees
             return employees;
         }
 
-        public async Task<int> CreateEmployeeAsync(CreateEmployee employeeToAdd)
+        public async Task<CreateResponse> CreateEmployeeAsync(CreateEmployee employeeToAdd)
         {
-            var id = await CreateAsync(employeeToAdd);
-            return id;
+            var response = await CreateAsync(employeeToAdd);
+            return response;
         }
 
         public async Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate)

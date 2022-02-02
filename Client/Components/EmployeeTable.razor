@@ -1,116 +1,116 @@
 ﻿@using _Imports = Client._Imports
 @using Action = Syncfusion.Blazor.Grids.Action
 
-@if (Employees.Count > 0)
+@if (!string.IsNullOrEmpty(_errorMessage))
 {
-    <SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
-            Toolbar="@(new List<string> {"Add", "Edit", "Delete"})">
-        <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
-            <HeaderTemplate>
-                <span>@GetHeaderText(context as EmployeeTableVm)</span>
-            </HeaderTemplate>
-            <Template>
-                @{
-                    var employee = context as EmployeeTableVm;
-                }
+    <div class="alert-danger">
+        <span>@_errorMessage</span>
+        <button @onclick="() => _errorMessage = string.Empty"></button>
+    </div>
+}
 
-                <div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <SfTextBox ID="@nameof(EmployeeTableVm.FirstName)" @bind-Value="@(employee.FirstName)" 
-                                       Placeholder="First name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
+<SfGrid @ref="EmployeesGrid" DataSource="@EmployeeTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
+        Toolbar="@(new List<string> {"Add", "Edit", "Delete"})">
+    <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
+        <HeaderTemplate>
+            <span>@GetHeaderText(context as EmployeeTableVm)</span>
+        </HeaderTemplate>
+        <Template>
+            @{
+                var employee = context as EmployeeTableVm;
+            }
+
+            <div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <SfTextBox ID="@nameof(EmployeeTableVm.FirstName)" @bind-Value="@(employee.FirstName)" 
+                                   Placeholder="First name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <SfTextBox ID="@nameof(EmployeeTableVm.LastName)" @bind-Value="@(employee.LastName)" 
+                                   Placeholder="Last name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <SfNumericTextBox ID="@nameof(EmployeeTableVm.Age)" @bind-Value="@employee.Age" 
+                                          Placeholder="Age" FloatLabelType="FloatLabelType.Always"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div>
+                            <SfDropDownList ID="@nameof(EmployeeTableVm.TeamId)" DataSource="DropDownSources.EditTeam" 
+                                            Placeholder="Team id" @bind-Value="@((context as EmployeeTableVm).TeamId)"
+                                            TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
+                                <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                            </SfDropDownList>
                         </div>
-                        <div class="form-group col-md-6">
-                            <SfTextBox ID="@nameof(EmployeeTableVm.LastName)" @bind-Value="@(employee.LastName)" 
-                                       Placeholder="Last name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <SfNumericTextBox ID="@nameof(EmployeeTableVm.Age)" @bind-Value="@employee.Age" 
-                                              Placeholder="Age" FloatLabelType="FloatLabelType.Always"></SfNumericTextBox>
-                        </div>
+                    </div>
+                    @if (_isEdit)
+                    {
                         <div class="form-group col-md-6">
                             <div>
-                                <SfDropDownList ID="@nameof(EmployeeTableVm.TeamId)" DataSource="DropDownSources.EditTeam" 
-                                                Placeholder="Team id" @bind-Value="@((context as EmployeeTableVm).TeamId)"
-                                                TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
+                                <label style="margin: 0;">Technology to remove</label>
+                                <SfDropDownList ID="@nameof(EmployeeTableVm.TechnologyToRemove)" DataSource="DropDownSources.EditTechnologiesToRemove" 
+                                                Placeholder="Technology to remove"@bind-Value="@((context as EmployeeTableVm).TechnologyToRemove)"
+                                                TItem="DropDownListItem" TValue="string">
                                     <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
                                 </SfDropDownList>
                             </div>
                         </div>
-                        @if (_isEdit)
-                        {
-                            <div class="form-group col-md-6">
-                                <div>
-                                    <label style="margin: 0;">Technology to remove</label>
-                                    <SfDropDownList ID="@nameof(EmployeeTableVm.TechnologyToRemove)" DataSource="DropDownSources.EditTechnologiesToRemove" 
-                                                    Placeholder="Technology to remove"@bind-Value="@((context as EmployeeTableVm).TechnologyToRemove)"
-                                                    TItem="DropDownListItem" TValue="string">
-                                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                </div>
+                        <div class="form-group col-md-6">
+                            <div>
+                                <label style="margin: 0;">Technology to add</label>
+                                <SfDropDownList ID="@nameof(EmployeeTableVm.TechnologyToAdd)" DataSource="DropDownSources.EditTechnologiesToAdd"
+                                                Placeholder="Technology to add" @bind-Value="@((context as EmployeeTableVm).TechnologyToAdd)"
+                                                TItem="DropDownListItem" TValue="string">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
                             </div>
-                            <div class="form-group col-md-6">
-                                <div>
-                                    <label style="margin: 0;">Technology to add</label>
-                                    <SfDropDownList ID="@nameof(EmployeeTableVm.TechnologyToAdd)" DataSource="DropDownSources.EditTechnologiesToAdd"
-                                                    Placeholder="Technology to add" @bind-Value="@((context as EmployeeTableVm).TechnologyToAdd)"
-                                                    TItem="DropDownListItem" TValue="string">
-                                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group col-md-6">
+                            <div>
+                                <label style="margin: 0;">Technology</label>
+                                <SfDropDownList ID="@nameof(EmployeeTableVm.Technology)" DataSource="DropDownSources.CreateTechnologiesToAdd" 
+                                                Placeholder="Technology" @bind-Value="@((context as EmployeeTableVm).Technology)"
+                                                TItem="DropDownListItem" TValue="string">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
                             </div>
-                        }
-                        else
-                        {
-                            <div class="form-group col-md-6">
-                                <div>
-                                    <label style="margin: 0;">Technology</label>
-                                    <SfDropDownList ID="@nameof(EmployeeTableVm.Technology)" DataSource="DropDownSources.CreateTechnologiesToAdd" 
-                                                    Placeholder="Technology" @bind-Value="@((context as EmployeeTableVm).Technology)"
-                                                    TItem="DropDownListItem" TValue="string">
-                                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                </div>
-                            </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
-            </Template>
-        </GridEditSettings>
-        <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
-        <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
-        <GridEvents OnActionBegin="ActionBeginHandler" TValue="EmployeeTableVm"></GridEvents>
-        <GridColumns>
-            <GridColumn IsPrimaryKey="true" Field="@nameof(EmployeeTableVm.Id)" Visible="false"></GridColumn>
-            <GridColumn Field="@nameof(EmployeeTableVm.FirstName)" HeaderText="First name"></GridColumn>
-            <GridColumn Field="@nameof(EmployeeTableVm.LastName)" HeaderText="Last name"></GridColumn>
-            <GridColumn Field="@nameof(EmployeeTableVm.Age)" HeaderText="Age"></GridColumn>
-            <GridColumn Field="@nameof(EmployeeTableVm.TechnologyNamesFlattened)" HeaderText="Technologies"
-                        FilterSettings="@(new FilterSettings { Operator = Operator.Contains })" AllowEditing="false">
-                <FilterTemplate>
-                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
-                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                        <DropDownListEvents TItem="DropDownListItem" TValue="string"
-                                            ValueChange="@SelectedTechnologyChangeHandler">
-                        </DropDownListEvents>
-                    </SfDropDownList>
-                </FilterTemplate>
-            </GridColumn>
-            <GridColumn Field="@nameof(EmployeeTableVm.TeamId)" HeaderText="Team id">
-                <FilterTemplate>
-                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
-                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                        <DropDownListEvents TItem="DropDownListItem" TValue="string"
-                                            ValueChange="@SelectedTeamChangeHandler">
-                        </DropDownListEvents>
-                    </SfDropDownList>
-                </FilterTemplate>
-            </GridColumn>
-        </GridColumns>
-    </SfGrid>
-}
-else {
-    <span>
-        Loading employees...
-    </span>
-}
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+    <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+    <GridEvents OnActionBegin="ActionBeginHandler" TValue="EmployeeTableVm"></GridEvents>
+    <GridColumns>
+        <GridColumn IsPrimaryKey="true" Field="@nameof(EmployeeTableVm.Id)" Visible="false"></GridColumn>
+        <GridColumn Field="@nameof(EmployeeTableVm.FirstName)" HeaderText="First name"></GridColumn>
+        <GridColumn Field="@nameof(EmployeeTableVm.LastName)" HeaderText="Last name"></GridColumn>
+        <GridColumn Field="@nameof(EmployeeTableVm.Age)" HeaderText="Age"></GridColumn>
+        <GridColumn Field="@nameof(EmployeeTableVm.TechnologyNamesFlattened)" HeaderText="Technologies"
+                    FilterSettings="@(new FilterSettings { Operator = Operator.Contains })" AllowEditing="false">
+            <FilterTemplate>
+                <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TechnologiesFilter" TItem="DropDownListItem" TValue="string">
+                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                    <DropDownListEvents TItem="DropDownListItem" TValue="string"
+                                        ValueChange="@SelectedTechnologyChangeHandler">
+                    </DropDownListEvents>
+                </SfDropDownList>
+            </FilterTemplate>
+        </GridColumn>
+        <GridColumn Field="@nameof(EmployeeTableVm.TeamId)" HeaderText="Team id">
+            <FilterTemplate>
+                <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.TeamsFilter" TItem="DropDownListItem" TValue="string">
+                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                    <DropDownListEvents TItem="DropDownListItem" TValue="string"
+                                        ValueChange="@SelectedTeamChangeHandler">
+                    </DropDownListEvents>
+                </SfDropDownList>
+            </FilterTemplate>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>

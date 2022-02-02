@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Project;
+using Application.Common.Responses;
 using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Client.HttpRepository.Projects
     {
         Task<List<GetProjectsQuery>> GetAllProjectsAsync();
 
-        Task<int> CreateProjectAsync(CreateProject projectToAdd);
+        Task<CreateResponse> CreateProjectAsync(CreateProject projectToAdd);
 
         Task<bool> UpdateProjectAsync(UpdateProject projectToUpdate);
 

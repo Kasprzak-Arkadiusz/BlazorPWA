@@ -35,7 +35,8 @@ namespace Client.Components
         private ProjectDropDownSources DropDownSources { get; set; } = new();
         private List<ProjectTableVm> ProjectTableVms { get; set; }
         private SfGrid<ProjectTableVm> ProjectsGrid { get; set; }
-
+        
+        private string _errorMessage;
         private bool _isEdit;
 
         protected override async Task OnParametersSetAsync()
@@ -46,7 +47,6 @@ namespace Client.Components
             await base.OnParametersSetAsync();
         }
 
-        // TODO Can be changed to mapping in AutoMapper
         private void FlattenProjectTableVms()
         {
             ProjectTableVms = Projects.Select(p => new ProjectTableVm
@@ -95,12 +95,12 @@ namespace Client.Components
                     return;
 
                 case Action.Save when args.Action == "Add":
-                    await AddProject(args.Data);
+                    await AddProject(args);
                     return;
 
                 case Action.BeginEdit:
                     _isEdit = true;
-                    InitEditDropdowns(args.Data.TechnologyNamesFlattened);
+                    InitEditDropdowns(args.Data);
                     return;
 
                 case Action.Save when args.Action == "Edit":
@@ -125,7 +125,7 @@ namespace Client.Components
                     Text = t.Name
                 }).ToList();
 
-            DropDownSources.EditTeam = Teams.Where(t => string.IsNullOrEmpty(t.ProjectName))
+            DropDownSources.CreateTeamToAdd = Teams.Where(t => string.IsNullOrEmpty(t.ProjectName))
                 .Select(t => new DropDownListItem
                 {
                     Value = t.Id.ToString(),
@@ -133,9 +133,9 @@ namespace Client.Components
                 }).ToList();
         }
 
-        private void InitEditDropdowns(string projectTechnologies)
+        private void InitEditDropdowns(ProjectTableVm projectTableVm)
         {
-            var technologiesList = projectTechnologies.Split(", ").ToList();
+            var technologiesList = projectTableVm.TechnologyNamesFlattened.Split(", ").ToList();
 
             DropDownSources.EditTechnologiesToAdd = Technologies
                 .Where(td => technologiesList.All(t => t != td.Name))
@@ -150,17 +150,12 @@ namespace Client.Components
                 Value = t,
                 Text = t
             }).ToList();
-
-            DropDownSources.EditTeam = Teams.Where(t => string.IsNullOrEmpty(t.ProjectName))
-                .Select(t => new DropDownListItem
-                {
-                    Value = t.Id.ToString(),
-                    Text = t.Id.ToString()
-                }).ToList();
         }
 
-        private async Task AddProject(ProjectTableVm projectTableVm)
+        private async Task AddProject(ActionEventArgs<ProjectTableVm> args)
         {
+            var projectTableVm = args.Data;
+
             var projectToAdd = new CreateProject
             {
                 Name = projectTableVm.Name,
@@ -169,9 +164,18 @@ namespace Client.Components
                 TechnologyNames = new List<string> { projectTableVm.Technology }
             };
 
-            var id = await ProjectsHttpRepository.CreateProjectAsync(projectToAdd);
-            projectTableVm.TechnologyNamesFlattened = string.IsNullOrEmpty(projectTableVm.Technology) ? string.Empty : projectTableVm.Technology;
-            projectTableVm.Id = id;
+            var response = await ProjectsHttpRepository.CreateProjectAsync(projectToAdd);
+
+            if (string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                projectTableVm.TechnologyNamesFlattened = string.IsNullOrEmpty(projectTableVm.Technology) ? string.Empty : projectTableVm.Technology;
+                projectTableVm.Id = response.Id;
+                return;
+            }
+
+            args.Cancel = true;
+            await ProjectsGrid.CloseEdit();
+            _errorMessage = response.ErrorMessage;
         }
 
         private async Task EditProject(ProjectTableVm projectTableVm)
@@ -181,7 +185,6 @@ namespace Client.Components
                 Id = projectTableVm.Id,
                 Name = projectTableVm.Name,
                 StartDate = projectTableVm.StartDate,
-                TeamId = string.IsNullOrEmpty(projectTableVm.TeamId) ? 0 : int.Parse(projectTableVm.TeamId),
                 TechnologyNames = new List<string>(projectTableVm.TechnologyNamesFlattened.Split(", "))
             };
 

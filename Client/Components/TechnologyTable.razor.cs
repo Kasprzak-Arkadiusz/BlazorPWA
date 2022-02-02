@@ -32,6 +32,8 @@ namespace Client.Components
         private List<TechnologyTableVm> TechnologyTableVms { get; set; }
         private SfGrid<TechnologyTableVm> TechnologiesGrid { get; set; }
 
+        private string _errorMessage;
+
         protected override async Task OnParametersSetAsync()
         {
             FillTechnologyTableVms();
@@ -79,7 +81,7 @@ namespace Client.Components
                     return;
 
                 case Action.Save when args.Action == "Add":
-                    await AddTechnology(args.Data);
+                    await AddTechnology(args);
                     return;
 
                 case Action.BeginEdit:
@@ -108,16 +110,27 @@ namespace Client.Components
             }).ToList();
         }
 
-        private async Task AddTechnology(TechnologyTableVm technologyTableVm)
+        private async Task AddTechnology(ActionEventArgs<TechnologyTableVm> args)
         {
+            var technologyTableVm = args.Data;
+
             var technologyToAdd = new CreateTechnology
             {
                 Name = technologyTableVm.Name,
                 TechnologyCategoryName = technologyTableVm.CategoryName
             };
 
-            var id = await TechnologiesHttpRepository.CreateTechnologyAsync(technologyToAdd);
-            technologyTableVm.Id = id;
+            var response = await TechnologiesHttpRepository.CreateTechnologyAsync(technologyToAdd);
+
+            if (string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                technologyTableVm.Id = response.Id;
+                return;
+            }
+
+            args.Cancel = true;
+            await TechnologiesGrid.CloseEdit();
+            _errorMessage = response.ErrorMessage;
         }
 
         private async Task EditTechnology(TechnologyTableVm technologyTableVm)

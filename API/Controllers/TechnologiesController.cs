@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Application.Common.Responses;
 
 namespace API.Controllers
 {
@@ -32,11 +33,11 @@ namespace API.Controllers
             try
             {
                 var id = await _technologyService.AddAsync(createTechnology);
-                return Ok(id);
+                return Ok(CreateResponse.Success(id));
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(CreateResponse.Error(e.Message));
             }
         }
 

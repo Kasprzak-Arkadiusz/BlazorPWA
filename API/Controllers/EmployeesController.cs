@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Employee;
 using Application.Common.Interfaces.Services;
+using Application.Common.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,11 +33,11 @@ namespace API.Controllers
             try
             {
                 var id = await _employeeService.AddAsync(createEmployee);
-                return Ok(id);
+                return Ok(CreateResponse.Success(id));
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(CreateResponse.Error(e.Message));
             }
         }
 

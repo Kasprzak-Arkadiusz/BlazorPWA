@@ -23,18 +23,18 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(policy =>
+            {
+                policy.AddDefaultPolicy(opt => opt
+                    .WithOrigins("https://localhost:5001","https://blazorpwasite.azurewebsites.net")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-
-            services.AddCors(policy =>
-            {
-                policy.AddPolicy("CorsPolicy", opt => opt
-                    .WithOrigins("https://localhost:5001","https://calm-field-0a37c9303.1.azurestaticapps.net")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -59,10 +59,8 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("CorsPolicy");
-
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

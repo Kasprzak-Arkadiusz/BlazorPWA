@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using Application.Common.Responses;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -19,20 +20,15 @@ namespace Client.HttpRepository
             HttpClient = httpClientFactory.CreateClient("WebAPI");
         }
 
-        protected async Task<int> CreateAsync<T>(T elementToAdd)
+        protected async Task<CreateResponse> CreateAsync<T>(T elementToAdd)
         {
             var json = JsonSerializer.Serialize(elementToAdd);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync(_requestUri, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadAsStringAsync();
-                return 0;
-            }
+            var createResponse = await response.Content.ReadFromJsonAsync<CreateResponse>();
 
-            var id = await response.Content.ReadFromJsonAsync<int>();
-            return id;
+            return createResponse;
         }
 
         protected async Task<bool> UpdateAsync<T>(T elementToUpdate)

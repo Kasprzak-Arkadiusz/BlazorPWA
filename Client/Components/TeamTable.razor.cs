@@ -80,8 +80,8 @@ namespace Client.Components
                 ProjectName = teamTableVm.ProjectName
             };
 
-            var id = await TeamsHttpRepository.CreateTeamAsync(teamToAdd);
-            teamTableVm.Id = id;
+            var response = await TeamsHttpRepository.CreateTeamAsync(teamToAdd);
+            teamTableVm.Id = response.Id;
         }
 
         private async Task DeleteTeam(int id)

@@ -22,6 +22,9 @@ namespace Client.Components
         public ITechnologyCategoriesHttpRepository TechnologyCategoriesHttpRepository { get; set; }
 
         private List<TechnologyCategoryTableVm> CategoryTableVms { get; set; }
+        private SfGrid<TechnologyCategoryTableVm> CategoriesGrid { get; set; }
+
+        private string _errorMessage;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -48,7 +51,7 @@ namespace Client.Components
             switch (args.RequestType)
             {
                 case Action.Save when args.Action == "Add":
-                    await AddCategory(args.Data);
+                    await AddCategory(args);
                     return;
 
                 case Action.Save when args.Action == "Edit":
@@ -64,14 +67,23 @@ namespace Client.Components
             }
         }
 
-        private async Task AddCategory(TechnologyCategoryTableVm data)
+        private async Task AddCategory(ActionEventArgs<TechnologyCategoryTableVm> args)
         {
+            var categoryTableVm = args.Data;
+
             var categoryToAdd = new CreateTechnologyCategory
             {
-                Name = data.Name
+                Name = categoryTableVm.Name
             };
 
-            await TechnologyCategoriesHttpRepository.CreateTechnologyCategoryAsync(categoryToAdd);
+            var response = await TechnologyCategoriesHttpRepository.CreateTechnologyCategoryAsync(categoryToAdd);
+
+            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                args.Cancel = true;
+                await CategoriesGrid.CloseEdit();
+                _errorMessage = response.ErrorMessage;
+            }
         }
 
         private async Task EditCategory(TechnologyCategoryTableVm data)

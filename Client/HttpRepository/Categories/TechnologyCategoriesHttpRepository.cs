@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Application.Common.Responses;
 
 namespace Client.HttpRepository.Categories
 {
@@ -31,10 +32,10 @@ namespace Client.HttpRepository.Categories
             return technologies;
         }
 
-        public async Task<int> CreateTechnologyCategoryAsync(CreateTechnologyCategory categoryToAdd)
+        public async Task<CreateResponse> CreateTechnologyCategoryAsync(CreateTechnologyCategory categoryToAdd)
         {
-            var id = await CreateAsync(categoryToAdd);
-            return id;
+            var response = await CreateAsync(categoryToAdd);
+            return response;
         }
 
         public async Task<bool> UpdateTechnologyCategoryAsync(UpdateTechnologyCategory categoryToUpdate)

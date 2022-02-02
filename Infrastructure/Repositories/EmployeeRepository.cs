@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
                     LastName = e.LastName,
                     Age = e.Age,
                     TeamId = e.Team.Id,
-                    TechnologyNames = e.EmployeeTechnologies.Select(et => et.Technology.Name).ToList()
+                    TechnologyNames = e.EmployeeTechnologies.Select(et => et.Technology.Name).OrderBy(t => t).ToList()
                 }).ToListAsync();
 
             return employees;

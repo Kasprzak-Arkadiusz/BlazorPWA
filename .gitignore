@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+.config/
+
+# Deployment files
+API/Properties/PublishProfiles/
+API/Properties/ServiceDependencies/
+API/Properties/serviceDependencies.json
+API/Properties/serviceDependencies.blazorPWAserver - Web Deploy.json
+Client/Properties/PublishProfiles/
+Client/Properties/ServiceDependencies/

@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Technology;
+using Application.Common.Responses;
 using Application.Queries;
 using System;
 using System.Collections.Generic;
@@ -31,10 +32,10 @@ namespace Client.HttpRepository.Technologies
             return technologies;
         }
 
-        public async Task<int> CreateTechnologyAsync(CreateTechnology technologyToAdd)
+        public async Task<CreateResponse> CreateTechnologyAsync(CreateTechnology technologyToAdd)
         {
-            var id = await CreateAsync(technologyToAdd);
-            return id;
+            var response = await CreateAsync(technologyToAdd);
+            return response;
         }
 
         public async Task<bool> UpdateTechnologyAsync(UpdateTechnology technologyToUpdate)

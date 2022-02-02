@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Technology;
+using Application.Common.Responses;
 using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Client.HttpRepository.Technologies
     {
         Task<List<GetTechnologiesQuery>> GetAllTechnologiesAsync();
 
-        Task<int> CreateTechnologyAsync(CreateTechnology technologyToAdd);
+        Task<CreateResponse> CreateTechnologyAsync(CreateTechnology technologyToAdd);
 
         Task<bool> UpdateTechnologyAsync(UpdateTechnology technologyToUpdate);
 

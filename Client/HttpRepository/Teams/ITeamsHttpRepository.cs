@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Team;
+using Application.Common.Responses;
 using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Client.HttpRepository.Teams
     {
         Task<List<GetTeamsQuery>> GetAllTeamsQuery();
 
-        Task<int> CreateTeamAsync(CreateTeam teamToAdd);
+        Task<CreateResponse> CreateTeamAsync(CreateTeam teamToAdd);
 
         Task<bool> UpdateTeamAsync(UpdateTeam teamToUpdate);
 

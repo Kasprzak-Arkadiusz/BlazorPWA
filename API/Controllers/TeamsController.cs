@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Team;
 using Application.Common.Interfaces.Services;
+using Application.Common.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,7 +24,7 @@ namespace API.Controllers
             var teams = await _teamService.GetAllAsync();
             return Ok(teams);
         }
-        
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -32,11 +33,11 @@ namespace API.Controllers
             try
             {
                 var id = await _teamService.AddAsync(createTeam);
-                return Ok(id);
+                return Ok(CreateResponse.Success(id));
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(CreateResponse.Error(e.Message));
             }
         }
 

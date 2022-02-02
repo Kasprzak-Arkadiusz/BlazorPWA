@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Project;
+using Application.Common.Responses;
 using Application.Queries;
 using System;
 using System.Collections.Generic;
@@ -31,10 +32,10 @@ namespace Client.HttpRepository.Projects
             return projects;
         }
 
-        public async Task<int> CreateProjectAsync(CreateProject projectToAdd)
+        public async Task<CreateResponse> CreateProjectAsync(CreateProject projectToAdd)
         {
-            var id = await CreateAsync(projectToAdd);
-            return id;
+            var response = await CreateAsync(projectToAdd);
+            return response;
         }
 
         public async Task<bool> UpdateProjectAsync(UpdateProject projectToUpdate)

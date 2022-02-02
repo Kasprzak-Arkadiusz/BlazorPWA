@@ -1,52 +1,58 @@
-﻿@if (Technologies.Count > 0)
+﻿@if (!string.IsNullOrEmpty(_errorMessage))
 {
-    <SfGrid @ref="TechnologiesGrid" DataSource="@TechnologyTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
-            Toolbar="@(new List<string> { "Add", "Edit", "Delete" })">
-         <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
-            <HeaderTemplate>
-                <span>@GetHeaderText(context as TechnologyTableVm)</span>
-            </HeaderTemplate>
-            <Template>
-                @{
-                    var technology = context as TechnologyTableVm;
-                }
+    <div class="alert-danger centered">
+        <span>@_errorMessage</span>
+        <button class="btn" @onclick="() => _errorMessage = string.Empty">OK</button>
+    </div>
+    
+}
 
-                <div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <SfTextBox ID="@nameof(TechnologyTableVm.Name)" @bind-Value="@(technology.Name)" 
-                                       Placeholder="Name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <div>
-                                <SfDropDownList ID="@nameof(TechnologyTableVm.CategoryName)" DataSource="DropDownSources.EditCategories" 
-                                                Placeholder="Category name" @bind-Value="@(technology.CategoryName)"
-                                                TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
-                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
+<SfGrid @ref="TechnologiesGrid" DataSource="@TechnologyTableVms" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowTextWrap="true"
+        Toolbar="@(new List<string> { "Add", "Edit", "Delete" })">
+    <GridEditSettings AllowAdding="IsOnline" AllowEditing="IsOnline" AllowDeleting="IsOnline" Mode="EditMode.Dialog">
+        <HeaderTemplate>
+            <span>@GetHeaderText(context as TechnologyTableVm)</span>
+        </HeaderTemplate>
+        <Template>
+            @{
+                var technology = context as TechnologyTableVm;
+            }
+
+            <div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <SfTextBox ID="@nameof(TechnologyTableVm.Name)" @bind-Value="@(technology.Name)" 
+                                   Placeholder="Name" FloatLabelType="FloatLabelType.Always"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div>
+                            <SfDropDownList ID="@nameof(TechnologyTableVm.CategoryName)" DataSource="DropDownSources.EditCategories" 
+                                            Placeholder="Category name" @bind-Value="@(technology.CategoryName)"
+                                            TItem="DropDownListItem" TValue="string" FloatLabelType="FloatLabelType.Always">
+                                <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                            </SfDropDownList>
                         </div>
                     </div>
                 </div>
-            </Template>
-        </GridEditSettings>
-        <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
-        <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
-        <GridEvents OnActionBegin="ActionBeginHandler" TValue="TechnologyTableVm"></GridEvents>
-        <GridColumns>
-            <GridColumn IsPrimaryKey="true" Field="@nameof(TechnologyTableVm.Id)" Visible="false"></GridColumn>
-            <GridColumn Field="@nameof(GetTechnologiesQuery.Name)" HeaderText="Name"></GridColumn>
-            <GridColumn Field="@nameof(GetTechnologiesQuery.CategoryName)" HeaderText="Category"
-                        FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
-                <FilterTemplate>
-                    <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.CategoriesFilter" TItem="DropDownListItem" TValue="string">
-                        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-                        <DropDownListEvents TItem="DropDownListItem" TValue="string"
-                                            ValueChange="@SelectedCategoryChangeHandler">
-                        </DropDownListEvents>
-                    </SfDropDownList>
-                </FilterTemplate>
-            </GridColumn>
-        </GridColumns>
-    </SfGrid>
-}
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridPageSettings PageSize="10" PageCount="5" PageSizes="true"></GridPageSettings>
+    <GridFilterSettings Mode="FilterBarMode.Immediate"></GridFilterSettings>
+    <GridEvents OnActionBegin="ActionBeginHandler" TValue="TechnologyTableVm"></GridEvents>
+    <GridColumns>
+        <GridColumn IsPrimaryKey="true" Field="@nameof(TechnologyTableVm.Id)" Visible="false"></GridColumn>
+        <GridColumn Field="@nameof(GetTechnologiesQuery.Name)" HeaderText="Name"></GridColumn>
+        <GridColumn Field="@nameof(GetTechnologiesQuery.CategoryName)" HeaderText="Category"
+                    FilterSettings="@(new FilterSettings { Operator = Operator.Contains })">
+            <FilterTemplate>
+                <SfDropDownList Placeholder="@DropDownFiller.DefaultFilterText" DataSource="DropDownSources.CategoriesFilter" TItem="DropDownListItem" TValue="string">
+                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                    <DropDownListEvents TItem="DropDownListItem" TValue="string"
+                                        ValueChange="@SelectedCategoryChangeHandler">
+                    </DropDownListEvents>
+                </SfDropDownList>
+            </FilterTemplate>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>

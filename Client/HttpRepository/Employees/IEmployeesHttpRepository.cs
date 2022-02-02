@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Employee;
+using Application.Common.Responses;
 using Application.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Client.HttpRepository.Employees
     {
         Task<List<GetEmployeesQuery>> GetAllEmployeesAsync();
 
-        Task<int> CreateEmployeeAsync(CreateEmployee employeeToAdd);
+        Task<CreateResponse> CreateEmployeeAsync(CreateEmployee employeeToAdd);
 
         Task<bool> UpdateEmployeeAsync(UpdateEmployee employeeToUpdate);
 

@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <UserSecretsId>25e0d064-f0bf-42c9-991f-f9753650bbb8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,8 +12,11 @@ namespace Application.Validators
             if (team is null)
                 throw new ArgumentNullException(nameof(team));
 
+            /*if (string.IsNullOrEmpty(team.ProjectName))
+                throw new NotProvidedRequiredParameterException(nameof(team.ProjectName));*/
+
             if (string.IsNullOrEmpty(team.ProjectName))
-                throw new NotProvidedRequiredParameterException(nameof(team.ProjectName));
+                return;
 
             if (team.ProjectName.Length > Constants.ProjectNameMaxLength)
                 throw new ParameterExceedsMaxLengthException(nameof(team.ProjectName));
