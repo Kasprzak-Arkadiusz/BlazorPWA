@@ -56,10 +56,15 @@ Example configuration
 5. Start program
 
 ## Sample views
-
-![](/images/home-page.png)
-![](/images/installed-app-desktop.png)
-![](/images/installed-app-mobile.png)
-![](/images/employees-page.png)
-![](/images/technologies-page.png)
-![](/images/projects-page.png)
+<p align="center">
+    <b>Home page in the browser</b><br>
+    <img src="/images/home-page.png">
+    <b>Home page in the desktop application</b><br>
+    <img src="/images/installed-app-desktop.png">
+    <b>Employee page</b><br>
+    <img src="/images/employees-page.png">
+    <b>Technologies page</b><br>
+    <img src="/images/technologies-page.png">
+    <b>Projects page</b><br>
+    <img src="/images/projects-page.png">
+</p>
