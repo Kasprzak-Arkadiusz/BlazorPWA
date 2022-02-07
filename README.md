@@ -61,6 +61,8 @@ Example configuration
     <img src="/images/home-page.png">
     <b>Home page in the desktop application</b><br>
     <img src="/images/installed-app-desktop.png">
+    <b>Example page in the mobile application</b><br>
+    <img src="/images/Example-page-mobile.png" width="480"><br>
     <b>Employee page</b><br>
     <img src="/images/employees-page.png">
     <b>Technologies page</b><br>
